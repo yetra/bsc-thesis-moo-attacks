@@ -24,6 +24,44 @@ class NSGA2:
         self.mutation = mutation
         self.selection = selection
 
+    def run(self):
+        """Executes the algorithm."""
+        population = []
+        # TODO initialize and evaluate population
+
+        fronts = self._nondominated_sort(population)
+
+        iteration = 0
+        while iteration < self.max_iterations:
+            union = self._create_union(population)
+            fronts = self._nondominated_sort(union)
+
+            next_population = []
+            too_large_front = []
+
+            for front in fronts:
+                self._crowding_distance_sort(front)
+
+                if len(next_population) + len(front) > self.population_size:
+                    too_large_front = front
+                    break
+
+                next_population += front
+
+            if len(next_population) < self.population_size:
+                too_large_front.sort(key=lambda ind: ind.crowding_distance, reverse=True)
+                new_last_front = []  # TODO ?
+
+                for i in range(self.population_size - len(too_large_front)):
+                    next_population += too_large_front[i]
+                    new_last_front += too_large_front[i]
+
+                fronts[-1] = new_last_front
+
+            population = next_population
+
+        return fronts
+
     def _create_union(self, parents):
         """Returns a list containing the given parents and population_size newly generated children."""
         union = parents[:]
