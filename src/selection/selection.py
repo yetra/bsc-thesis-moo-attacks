@@ -6,4 +6,4 @@ class Selection(ABC):
 
     @abstractmethod
     def select_from(self, population):
-        """Returns an individual selected from the given population."""
+        """Returns a solution selected from the given population."""
