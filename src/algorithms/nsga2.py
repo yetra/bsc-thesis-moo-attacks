@@ -37,3 +37,40 @@ class NSGA2:
                 child_count += 1  # TODO check count?
 
         return union
+
+    def _nondominated_sort(self, population):
+        """Returns the fronts obtained by performing a non-dominated sort of the given population."""
+        current_front = []
+
+        for individual in population:
+            individual.dominates_list = []
+
+            for candidate in population:
+                if individual.dominates(candidate):
+                    individual.dominates_list += candidate
+                elif candidate.dominates(individual):
+                    individual.dominated_by += 1
+
+            if individual.dominated_by == 0:
+                current_front += individual
+                individual.rank = 0
+
+        fronts = []
+        front_index = 0
+
+        while current_front:
+            fronts.append(current_front)
+            next_front = []
+
+            for individual in current_front:
+                for dominated_individual in individual.dominates_list:
+                    dominated_individual.dominated_by -= 1
+
+                    if dominated_individual.dominated_by == 0:
+                        next_front += dominated_individual
+                        dominated_individual.rank = front_index + 1
+
+            front_index += 1
+            current_front = next_front
+
+        return fronts
