@@ -1,3 +1,6 @@
+import math
+
+
 class NSGA2:
     """An implementation of NSGA-II.
 
@@ -74,3 +77,19 @@ class NSGA2:
             current_front = next_front
 
         return fronts
+
+    def _crowding_distance_sort(self, front):
+        """Sorts the given front by crowding distance."""
+        for individual in front:
+            individual.crowding_distance = 0
+
+        front[0].crowding_distance = math.inf
+        front[-1].crowding_distance = math.inf
+
+        for i in range(self.problem.objectives_count):
+            front.sort(key=lambda ind: ind.objectives[i])
+
+            for j in range(1, len(front) - 1):
+                neighbors_diff = front[j + 1].objectives[i] - front[j - 1].objectives[i]
+                max_diff = self.problem.objective_maxs[i] - self.problem.objective_mins[i]
+                front[j].crowding_distance += neighbors_diff / max_diff
