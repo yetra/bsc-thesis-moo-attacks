@@ -1,3 +1,6 @@
+import random
+
+
 class Solution:
     """Models a multi-objective optimization problem's solution.
 
@@ -10,3 +13,12 @@ class Solution:
         """Initializes Solution attributes."""
         self.variables = []
         self.objectives = []
+
+    def _randomize(self, problem):
+        """Randomizes the decision space variables of this solution.
+
+        Args:
+            problem: the MOOP object containing info on the decision space dimension and constraints
+        """
+        for _ in range(problem.variables_count):
+            self.variables.append(random.uniform(problem.mins, problem.maxs))
