@@ -20,3 +20,20 @@ class NSGA2:
         self.crossover = crossover
         self.mutation = mutation
         self.selection = selection
+
+    def _create_union(self, parents):
+        """Returns a list containing the given parents and population_size newly generated children."""
+        union = parents[:]
+
+        child_count = 0
+        while child_count < self.population_size:
+            first_parent = self.selection.select_from(parents)
+            second_parent = self.selection.select_from(parents)
+            children = self.crossover.of(first_parent, second_parent)
+
+            for child in children:
+                self.mutation.mutate(child)  # TODO evaluate child
+                union += child
+                child_count += 1  # TODO check count?
+
+        return union
