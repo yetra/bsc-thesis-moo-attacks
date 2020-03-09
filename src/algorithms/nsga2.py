@@ -28,9 +28,7 @@ class NSGA2:
 
     def run(self):
         """Executes the algorithm."""
-        population = []
-        self._initialize(population)
-
+        population = self._get_initial_population()
         fronts = self._nondominated_sort(population)
 
         iteration = 0
@@ -64,12 +62,16 @@ class NSGA2:
 
         return fronts
 
-    def _initialize(self, population):
-        """Initializes the given population."""
+    def _get_initial_population(self):
+        """Returns the initial population."""
+        population = []
+
         for _ in range(self.population_size):
             solution = Solution(self.problem)
             self.problem.evaluate(solution)
             population.append(solution)
+
+        return population
 
     def _create_union(self, parents):
         """Returns a list containing the given parents and population_size newly generated children."""
