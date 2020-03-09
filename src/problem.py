@@ -1,4 +1,7 @@
-class Problem:
+from abc import ABC
+
+
+class Problem(ABC):
     """Models a multi-objective optimization problem.
 
     Attributes:
