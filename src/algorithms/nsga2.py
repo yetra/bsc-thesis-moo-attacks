@@ -40,8 +40,6 @@ class NSGA2:
             too_large_front = []
 
             for front in fronts:
-                self._crowding_distance_sort(front)
-
                 if len(next_population) + len(front) > self.population_size:
                     too_large_front = front
                     break
@@ -111,6 +109,7 @@ class NSGA2:
         front_index = 0
 
         while current_front:
+            self._crowding_distance_sort(current_front)
             fronts.append(current_front)
             next_front = []
 
