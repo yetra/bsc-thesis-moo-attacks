@@ -1,5 +1,7 @@
 import math
 
+from src.solution import Solution
+
 
 class NSGA2:
     """An implementation of NSGA-II.
@@ -27,7 +29,7 @@ class NSGA2:
     def run(self):
         """Executes the algorithm."""
         population = []
-        # TODO initialize and evaluate population
+        self._initialize(population)
 
         fronts = self._nondominated_sort(population)
 
@@ -61,6 +63,13 @@ class NSGA2:
             population = next_population
 
         return fronts
+
+    def _initialize(self, population):
+        """Initializes the given population."""
+        for _ in range(self.population_size):
+            solution = Solution(self.problem)
+            self.problem.evaluate(solution)
+            population.append(solution)
 
     def _create_union(self, parents):
         """Returns a list containing the given parents and population_size newly generated children."""
