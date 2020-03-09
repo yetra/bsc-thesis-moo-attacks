@@ -25,3 +25,15 @@ class NSGA2Solution(Solution):
 
         self.crowding_distance = -1
         self.rank = -1
+
+    def dominates(self, other):
+        """Returns True if this solution dominates the given solution."""
+        is_strictly_better = False
+
+        for o1, o2 in zip(self.objectives, other.objectives):
+            if o1 > o2:
+                return False
+            if o1 < o2:
+                is_strictly_better = True
+
+        return is_strictly_better
