@@ -1,5 +1,5 @@
 from src.crossover.crossover import Crossover
-from src.solution import Solution
+from src.solution.solution import Solution
 
 
 class ArithmeticCrossover(Crossover):
@@ -17,7 +17,7 @@ class ArithmeticCrossover(Crossover):
 
     def of(self, first_parent, second_parent):
         """Returns two child solutions obtained by arithmetically crossing the given parents."""
-        first_child, second_child = Solution(), Solution()
+        first_child, second_child = Solution(), Solution()  # TODO instantiate appropriate class
 
         for v1, v2 in zip(first_parent.variables, second_parent.variables):
             first_child.variables.append(self.alpha * v1 + (1 - self.alpha) * v2)
