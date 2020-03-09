@@ -1,6 +1,6 @@
 import math
 
-from src.solution.solution import Solution
+from src.solution.nsga2_solution import NSGA2Solution
 
 
 class NSGA2:
@@ -65,7 +65,7 @@ class NSGA2:
         population = []
 
         for _ in range(self.population_size):
-            solution = Solution(self.problem)
+            solution = NSGA2Solution(self.problem)
             self.problem.evaluate(solution)
             population.append(solution)
 
