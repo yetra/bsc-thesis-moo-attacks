@@ -51,8 +51,8 @@ class NSGA2:
                 new_last_front = []  # TODO ?
 
                 for i in range(self.population_size - len(too_large_front)):
-                    next_population += too_large_front[i]
-                    new_last_front += too_large_front[i]
+                    next_population.append(too_large_front[i])
+                    new_last_front.append(too_large_front[i])
 
                 fronts[-1] = new_last_front
 
@@ -98,12 +98,12 @@ class NSGA2:
 
             for candidate in population:
                 if solution.dominates(candidate):
-                    solution.dominates_list += candidate
+                    solution.dominates_list.append(candidate)
                 elif candidate.dominates(solution):
                     solution.dominated_by += 1
 
             if solution.dominated_by == 0:
-                current_front += solution
+                current_front.append(solution)
                 solution.rank = 0
 
         fronts = []
@@ -119,11 +119,11 @@ class NSGA2:
                     dominated.dominated_by -= 1
 
                     if dominated.dominated_by == 0:
-                        next_front += dominated
+                        next_front.append(dominated)
                         dominated.rank = front_index + 1
 
-            front_index += 1
             current_front = next_front
+            front_index += 1
 
         return fronts
 
