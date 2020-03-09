@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Problem(ABC):
@@ -23,3 +23,7 @@ class Problem(ABC):
 
         self.objective_mins = objective_mins
         self.objective_maxs = objective_maxs
+
+    @abstractmethod
+    def evaluate(self, solution):
+        """Evaluates the given solution."""
