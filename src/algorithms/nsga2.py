@@ -93,18 +93,18 @@ class NSGA2:
         """Returns the fronts obtained by performing a non-dominated sort of the given population."""
         current_front = []
 
-        for individual in population:
-            individual.dominates_list = []
+        for solution in population:
+            solution.dominates_list = []
 
             for candidate in population:
-                if individual.dominates(candidate):
-                    individual.dominates_list += candidate
-                elif candidate.dominates(individual):
-                    individual.dominated_by += 1
+                if solution.dominates(candidate):
+                    solution.dominates_list += candidate
+                elif candidate.dominates(solution):
+                    solution.dominated_by += 1
 
-            if individual.dominated_by == 0:
-                current_front += individual
-                individual.rank = 0
+            if solution.dominated_by == 0:
+                current_front += solution
+                solution.rank = 0
 
         fronts = []
         front_index = 0
@@ -114,13 +114,13 @@ class NSGA2:
             fronts.append(current_front)
             next_front = []
 
-            for individual in current_front:
-                for dominated_individual in individual.dominates_list:
-                    dominated_individual.dominated_by -= 1
+            for solution in current_front:
+                for dominated in solution.dominates_list:
+                    dominated.dominated_by -= 1
 
-                    if dominated_individual.dominated_by == 0:
-                        next_front += dominated_individual
-                        dominated_individual.rank = front_index + 1
+                    if dominated.dominated_by == 0:
+                        next_front += dominated
+                        dominated.rank = front_index + 1
 
             front_index += 1
             current_front = next_front
@@ -129,8 +129,8 @@ class NSGA2:
 
     def _crowding_distance_sort(self, front):
         """Sorts the given front by crowding distance."""
-        for individual in front:
-            individual.crowding_distance = 0
+        for solution in front:
+            solution.crowding_distance = 0
 
         front[0].crowding_distance = math.inf
         front[-1].crowding_distance = math.inf
