@@ -82,8 +82,9 @@ class NSGA2:
             children = self.crossover.of(first_parent, second_parent)
 
             for child in children:
-                self.mutation.mutate(child)  # TODO evaluate child
-                union += child
+                self.mutation.mutate(child)
+                self.problem.evaluate(child)
+                union.append(child)
                 child_count += 1  # TODO check count?
 
         return union
