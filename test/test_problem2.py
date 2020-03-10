@@ -4,8 +4,8 @@ from src.problem import Problem
 class TestProblem2(Problem):
     """Models the following multi-objective optimization problem:
 
-     f1(x1, x2) = x1,
-     f2(x1, x2) = (1 + x2) / x1
+    f1(x1, x2) = x1,
+    f2(x1, x2) = (1 + x2) / x1
     """
 
     def __init__(self):
