@@ -37,24 +37,17 @@ class NSGA2:
             fronts = self.fast_non_dominated_sort(population + offspring)
 
             next_population = []
-            too_large_front = []
+            front_index = 0
 
-            for front in fronts:
-                if len(next_population) + len(front) > self.population_size:
-                    too_large_front = front
-                    break
+            while len(next_population) + len(fronts[front_index]) <= self.population_size:
+                next_population += fronts[front_index]
+                front_index += 1
 
-                next_population += front
+            too_large_front = fronts[front_index]
+            too_large_front.sort(key=lambda ind: ind.crowding_distance, reverse=True)  # TODO crowded-comparison op
 
-            if len(next_population) < self.population_size:
-                too_large_front.sort(key=lambda ind: ind.crowding_distance, reverse=True)
-                new_last_front = []  # TODO ?
-
-                for i in range(self.population_size - len(too_large_front)):
-                    next_population.append(too_large_front[i])
-                    new_last_front.append(too_large_front[i])
-
-                fronts[-1] = new_last_front
+            fill_count = self.population_size - len(too_large_front)
+            next_population += too_large_front[:fill_count]
 
             population = next_population
 
