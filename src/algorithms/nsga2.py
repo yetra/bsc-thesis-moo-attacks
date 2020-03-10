@@ -44,7 +44,7 @@ class NSGA2:
                 front_index += 1
 
             too_large_front = fronts[front_index]
-            too_large_front.sort(key=lambda ind: ind.crowding_distance, reverse=True)  # TODO crowded-comparison op
+            too_large_front.sort(reverse=True)  # TODO partial order?
 
             fill_count = self.population_size - len(too_large_front)
             next_population += too_large_front[:fill_count]

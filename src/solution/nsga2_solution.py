@@ -10,6 +10,7 @@ class NSGA2Solution(Solution):
         crowding_distance: the crowding distance value of this solution
         rank: the rank of this solution
     """
+    
     def __init__(self, problem=None):
         """Initializes Solution attributes.
 
@@ -25,6 +26,12 @@ class NSGA2Solution(Solution):
 
         self.crowding_distance = -1
         self.rank = -1
+
+    def __gt__(self, other):
+        """Applies the crowding-comparison operator."""
+        return self.rank < other.rank \
+            or self.rank == other.rank \
+            and self.crowding_distance > other.crowding_distance
 
     def dominates(self, other):
         """Returns True if this solution dominates the given solution."""
