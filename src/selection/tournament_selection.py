@@ -28,3 +28,5 @@ class TournamentSelection(Selection):
             if best is None or random_solution > best:
                 best = random_solution
                 best_found += 1
+
+        return best
