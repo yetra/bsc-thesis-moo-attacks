@@ -13,17 +13,19 @@ class GaussianMutation(Mutation):
         mu: the mean
         sigma: the standard deviation
         probability: the probability of mutating a decision vector variable
-
+        problem: the MOOP being optimized
     """
 
-    def __init__(self, mu, sigma, probability):
+    def __init__(self, mu, sigma, probability, problem):
         """Initializes GaussianMutation attributes."""
         self.mu = mu
         self.sigma = sigma
         self.probability = probability
+        self.problem = problem
 
     def mutate(self, solution):
         """Mutates the given solution."""
         for i in range(len(solution.variables)):
             if random.random() <= self.probability:
                 solution.variables[i] += random.gauss(self.mu, self.sigma)
+                self.problem.check_constraints(solution, i)
