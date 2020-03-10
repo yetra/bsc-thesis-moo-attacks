@@ -25,10 +25,13 @@ class TestProblem1(Problem):
 
     def evaluate(self, solution):
         """Evaluates the given solution."""
-        for i, v, o in enumerate(zip(solution.variables, solution.objectives)):
-            solution.objectives[i] = v * v
+        solution.objectives = []
 
-            if not self.objective_mins[i] or o < self.objective_mins[i]:
-                self.objective_mins[i] = o
-            elif not self.objective_maxs[i] or o > self.objective_maxs[i]:
-                self.objective_maxs[i] = o
+        for i, v in enumerate(solution.variables):
+            objective = v * v
+            solution.objectives.append(objective)
+
+            if self.objective_mins[i] is None or objective < self.objective_mins[i]:
+                self.objective_mins[i] = objective
+            elif self.objective_maxs[i] is None or objective > self.objective_maxs[i]:
+                self.objective_maxs[i] = objective
