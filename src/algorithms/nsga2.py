@@ -33,8 +33,8 @@ class NSGA2:
 
         iteration = 0
         while iteration < self.max_iterations:
-            union = self.create_union(population)
-            fronts = self.fast_non_dominated_sort(union)
+            offspring = self.generate_offspring(population)
+            fronts = self.fast_non_dominated_sort(population + offspring)
 
             next_population = []
             too_large_front = []
@@ -71,12 +71,11 @@ class NSGA2:
 
         return population
 
-    def create_union(self, parents):
-        """Returns a list containing the given parents and population_size newly generated children."""
-        union = parents[:]
+    def generate_offspring(self, parents):
+        """Generates population_size offspring from the given parent population."""
+        offspring = []
 
-        child_count = 0
-        while child_count < self.population_size:
+        while len(offspring) < self.population_size:
             first_parent = self.selection.select_from(parents)
             second_parent = self.selection.select_from(parents)
             children = self.crossover.of(first_parent, second_parent)
@@ -84,10 +83,9 @@ class NSGA2:
             for child in children:
                 self.mutation.mutate(child)
                 self.problem.evaluate(child)
-                union.append(child)
-                child_count += 1  # TODO check count?
+                offspring.append(child)
 
-        return union
+        return offspring
 
     def fast_non_dominated_sort(self, population):
         """Returns the fronts obtained by performing a non-dominated sort of the given population."""
