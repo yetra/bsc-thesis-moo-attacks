@@ -28,13 +28,13 @@ class NSGA2:
 
     def run(self):
         """Executes the algorithm."""
-        population = self._get_initial_population()
-        fronts = self._nondominated_sort(population)
+        population = self.generate_initial_population()
+        fronts = self.fast_non_dominated_sort(population)
 
         iteration = 0
         while iteration < self.max_iterations:
-            union = self._create_union(population)
-            fronts = self._nondominated_sort(union)
+            union = self.create_union(population)
+            fronts = self.fast_non_dominated_sort(union)
 
             next_population = []
             too_large_front = []
@@ -60,7 +60,7 @@ class NSGA2:
 
         return fronts
 
-    def _get_initial_population(self):
+    def generate_initial_population(self):
         """Returns the initial population."""
         population = []
 
@@ -71,7 +71,7 @@ class NSGA2:
 
         return population
 
-    def _create_union(self, parents):
+    def create_union(self, parents):
         """Returns a list containing the given parents and population_size newly generated children."""
         union = parents[:]
 
@@ -89,7 +89,7 @@ class NSGA2:
 
         return union
 
-    def _nondominated_sort(self, population):
+    def fast_non_dominated_sort(self, population):
         """Returns the fronts obtained by performing a non-dominated sort of the given population."""
         current_front = []
 
@@ -111,7 +111,7 @@ class NSGA2:
         front_index = 0
 
         while current_front:
-            self._crowding_distance_sort(current_front)
+            self.crowding_distance_assignment(current_front)
             fronts.append(current_front)
             next_front = []
 
@@ -128,8 +128,8 @@ class NSGA2:
 
         return fronts
 
-    def _crowding_distance_sort(self, front):
-        """Sorts the given front by crowding distance."""
+    def crowding_distance_assignment(self, front):
+        """Assigns crowding distance values to all solutions in the given front."""
         for solution in front:
             solution.crowding_distance = 0
 
