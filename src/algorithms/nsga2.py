@@ -95,6 +95,7 @@ class NSGA2:
 
         for solution in population:
             solution.dominates_list = []
+            solution.dominated_by = 0
 
             for candidate in population:
                 if solution.dominates(candidate):
