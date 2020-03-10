@@ -50,6 +50,7 @@ class NSGA2:
             next_population += too_large_front[:fill_count]
 
             population = next_population
+            iteration += 1
 
         return fronts
 
