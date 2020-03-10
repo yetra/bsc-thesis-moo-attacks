@@ -13,16 +13,16 @@ class Problem(ABC):
         objective_maxs: the highest possible values of each objective
     """
 
-    def __init__(self, variables_count, objectives_count, mins, maxs, objective_mins, objective_maxs):
+    def __init__(self):
         """Initializes Problem attributes."""
-        self.variables_count = variables_count
-        self.objectives_count = objectives_count
+        self.variables_count = -1
+        self.objectives_count = -1
 
-        self.mins = mins
-        self.maxs = maxs
+        self.mins = []
+        self.maxs = []
 
-        self.objective_mins = objective_mins
-        self.objective_maxs = objective_maxs
+        self.objective_mins = []
+        self.objective_maxs = []
 
     @abstractmethod
     def evaluate(self, solution):
