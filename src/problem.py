@@ -1,4 +1,7 @@
-class Problem:
+from abc import ABC, abstractmethod
+
+
+class Problem(ABC):
     """Models a multi-objective optimization problem.
 
     Attributes:
@@ -10,13 +13,24 @@ class Problem:
         objective_maxs: the highest possible values of each objective
     """
 
-    def __init__(self, variables_count, objectives_count, mins, maxs, objective_mins, objective_maxs):
+    def __init__(self):
         """Initializes Problem attributes."""
-        self.variables_count = variables_count
-        self.objectives_count = objectives_count
+        self.variables_count = -1
+        self.objectives_count = -1
 
-        self.mins = mins
-        self.maxs = maxs
+        self.mins = []
+        self.maxs = []
 
-        self.objective_mins = objective_mins
-        self.objective_maxs = objective_maxs
+        self.objective_mins = []
+        self.objective_maxs = []
+
+    def check_constraints(self, solution, index):
+        """Updates a solution's variable at the given index so that it satisfies the constraints."""
+        if solution.variables[index] < self.mins[index]:
+            solution.variables[index] = self.mins[index]
+        elif solution.variables[index] > self.maxs[index]:
+            solution.variables[index] = self.maxs[index]
+
+    @abstractmethod
+    def evaluate(self, solution):
+        """Evaluates the given solution."""

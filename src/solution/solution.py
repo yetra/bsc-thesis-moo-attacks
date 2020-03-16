@@ -21,13 +21,13 @@ class Solution:
         self.objectives = []
 
         if problem:
-            self._randomize(problem)
+            self.randomize(problem)
 
-    def _randomize(self, problem):
+    def randomize(self, problem):
         """Randomizes the decision space variables of this solution.
 
         Args:
             problem: the MOOP object containing info on the decision space dimension and constraints
         """
-        for _ in range(problem.variables_count):
-            self.variables.append(random.uniform(problem.mins, problem.maxs))
+        for min_v, max_v in zip(problem.mins, problem.maxs):
+            self.variables.append(random.uniform(min_v, max_v))

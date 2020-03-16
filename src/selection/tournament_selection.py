@@ -19,14 +19,10 @@ class TournamentSelection(Selection):
 
     def select_from(self, population):
         """Returns a solution selected from the given population."""
-        best_count = 0
-        best = None
+        tournament = []
 
-        while best_count < self.tournament_size:
+        for _ in range(self.tournament_size):
             random_solution = random.choice(population)
+            tournament.append(random_solution)
 
-            if best is None or random_solution > best:
-                best = random_solution
-                best_count += 1
-
-        # TODO comparison operators - crowded tournament selection
+        return max(tournament)
