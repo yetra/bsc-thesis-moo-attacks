@@ -23,11 +23,12 @@ class TestProblem2(Problem):
 
     def evaluate(self, solution):
         """Evaluates the given solution."""
-        solution.objectives[0] = solution.variables[0]
-        solution.objectives[1] = (1.0 + solution.variables[1]) / solution.variables[0]
+        solution.objectives = [solution.variables[0],
+                               (1.0 + solution.variables[1])
+                               / solution.variables[0]]
 
         for i, o in enumerate(solution.objectives):
-            if not self.objective_mins[i] or o < self.objective_mins[i]:
+            if self.objective_mins[i] is None or o < self.objective_mins[i]:
                 self.objective_mins[i] = o
-            elif not self.objective_maxs[i] or o > self.objective_maxs[i]:
+            elif self.objective_maxs[i] is None or o > self.objective_maxs[i]:
                 self.objective_maxs[i] = o
