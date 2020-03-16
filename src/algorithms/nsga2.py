@@ -33,6 +33,8 @@ class NSGA2:
 
         iteration = 0
         while iteration < self.max_iterations:
+            print(f'i={iteration}')
+            
             offspring = self.generate_offspring(population)
             fronts = self.fast_non_dominated_sort(population + offspring)
 
