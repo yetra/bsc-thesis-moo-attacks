@@ -29,7 +29,7 @@ class NSGA2:
     def run(self):
         """Executes the algorithm."""
         population = self.generate_initial_population()
-        fronts = self.fast_non_dominated_sort(population)
+        self.fast_non_dominated_sort(population)
 
         iteration = 0
         while iteration < self.max_iterations:
@@ -52,7 +52,7 @@ class NSGA2:
             population = next_population
             iteration += 1
 
-        return fronts
+        return self.fast_non_dominated_sort(population)  # TODO ?
 
     def generate_initial_population(self):
         """Returns the initial population."""
