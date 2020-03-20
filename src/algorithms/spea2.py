@@ -28,6 +28,24 @@ class SPEA2:
         self.mutation = mutation
         self.selection = selection
 
+    def run(self):
+        """Executes the algorithm."""
+        population = self.generate_initial_population()
+        archive = []
+
+        iteration = 0
+        while iteration < self.max_iterations:
+            union = population + archive
+
+            for solution in population:
+                for candidate in population:
+                    if solution.dominates(candidate):
+                        candidate.dominators.append(solution)
+                        solution.strength += 1
+
+            for solution in population:
+                solution.raw_fitness = sum(d.strength for d in solution.dominators)
+
     def generate_initial_population(self):
         """Returns the initial population."""
         population = []
