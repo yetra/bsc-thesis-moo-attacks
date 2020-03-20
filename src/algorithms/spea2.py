@@ -92,6 +92,22 @@ class SPEA2:
 
         return population
 
+    def generate_next_population(self, parents):
+        """Generates population_size offspring from the given parents."""
+        offspring = []
+
+        while len(offspring) < self.population_size:
+            first_parent = self.selection.select_from(parents)
+            second_parent = self.selection.select_from(parents)
+            children = self.crossover.of(first_parent, second_parent)
+
+            for child in children:
+                self.mutation.mutate(child)
+                self.problem.evaluate(child)
+                offspring.append(child)
+
+        return offspring
+
     def euclidean_distance(self, first_solution, second_solution):
         """Returns the Euclidean distance between the given solutions."""
         distance = 0.0
