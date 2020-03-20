@@ -85,6 +85,8 @@ class SPEA2:
             archive = next_archive
             iteration += 1
 
+        return archive
+
     def generate_initial_population(self):
         """Returns the initial population."""
         population = []
