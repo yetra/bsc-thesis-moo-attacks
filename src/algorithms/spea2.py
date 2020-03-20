@@ -60,6 +60,11 @@ class SPEA2:
 
             next_archive = [s for s in union if s.fitness < 1]
 
+            if len(next_archive) < len(archive):
+                union.sort(key=lambda s: s.fitness, reverse=True)
+                fill_count = len(archive) - len(next_archive)
+                next_archive += union[:fill_count]
+
     def generate_initial_population(self):
         """Returns the initial population."""
         population = []
