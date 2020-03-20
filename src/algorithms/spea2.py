@@ -37,13 +37,13 @@ class SPEA2:
         while iteration < self.max_iterations:
             union = population + archive
 
-            for solution in population:
-                for candidate in population:
+            for solution in union:
+                for candidate in union:
                     if solution.dominates(candidate):
                         candidate.dominators.append(solution)
                         solution.strength += 1
 
-            for solution in population:
+            for solution in union:
                 solution.raw_fitness = sum(d.strength for d in solution.dominators)
 
     def generate_initial_population(self):
