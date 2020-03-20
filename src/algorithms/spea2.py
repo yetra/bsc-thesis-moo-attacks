@@ -56,6 +56,7 @@ class SPEA2:
 
             for solution in union:
                 solution.raw_fitness = sum(d.strength for d in solution.dominators)
+                solution.fitness = solution.raw_fitness + solution.density
 
     def generate_initial_population(self):
         """Returns the initial population."""
