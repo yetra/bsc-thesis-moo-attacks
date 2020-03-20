@@ -38,6 +38,7 @@ class SPEA2:
         iteration = 0
         while iteration < self.max_iterations:
             union = population + archive
+            k = int(math.sqrt(len(union)))
 
             for solution in union:
                 distances = []
@@ -49,6 +50,9 @@ class SPEA2:
                     if solution.dominates(candidate):
                         candidate.dominators.append(solution)
                         solution.strength += 1
+
+                distances.sort()
+                solution.density = 1.0 / (distances[k] + 2.0)
 
             for solution in union:
                 solution.raw_fitness = sum(d.strength for d in solution.dominators)
