@@ -1,6 +1,6 @@
 import math
 
-from solution.solution import Solution
+from solution.spea2_solution import SPEA2Solution
 
 
 class SPEA2:
@@ -92,7 +92,7 @@ class SPEA2:
         population = []
 
         for _ in range(self.population_size):
-            solution = Solution(self.problem)
+            solution = SPEA2Solution(self.problem)
             self.problem.evaluate(solution)
             population.append(solution)
 
