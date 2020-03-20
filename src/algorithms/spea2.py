@@ -40,9 +40,11 @@ class SPEA2:
             union = population + archive
 
             for solution in union:
+                distances = []
+
                 for candidate in union:
                     distance = self.euclidean_distance(solution, candidate)
-                    solution.distances.append(distance)
+                    distances.append(distance)
 
                     if solution.dominates(candidate):
                         candidate.dominators.append(solution)
