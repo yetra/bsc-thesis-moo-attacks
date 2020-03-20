@@ -81,6 +81,10 @@ class SPEA2:
                 remove_count = len(next_archive) - len(archive)
                 next_archive = next_archive[remove_count:]
 
+            population = self.generate_next_population(next_archive)
+            archive = next_archive
+            iteration += 1
+
     def generate_initial_population(self):
         """Returns the initial population."""
         population = []
