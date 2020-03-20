@@ -1,3 +1,5 @@
+import math
+
 from solution.solution import Solution
 
 
@@ -39,6 +41,9 @@ class SPEA2:
 
             for solution in union:
                 for candidate in union:
+                    distance = self.euclidean_distance(solution, candidate)
+                    solution.distances.append(distance)
+
                     if solution.dominates(candidate):
                         candidate.dominators.append(solution)
                         solution.strength += 1
@@ -56,3 +61,12 @@ class SPEA2:
             population.append(solution)
 
         return population
+
+    def euclidean_distance(self, first_solution, second_solution):
+        """Returns the Euclidean distance between the given solutions."""
+        distance = 0.0
+
+        for o1, o2 in zip(first_solution.objectives, second_solution.objectives):
+            distance += (o2 - o1) ** 2
+
+        return math.sqrt(distance)
