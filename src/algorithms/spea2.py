@@ -27,3 +27,14 @@ class SPEA2:
         self.crossover = crossover
         self.mutation = mutation
         self.selection = selection
+
+    def generate_initial_population(self):
+        """Returns the initial population."""
+        population = []
+
+        for _ in range(self.population_size):
+            solution = Solution(self.problem)
+            self.problem.evaluate(solution)
+            population.append(solution)
+
+        return population
