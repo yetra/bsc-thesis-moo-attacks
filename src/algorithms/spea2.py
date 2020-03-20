@@ -58,6 +58,8 @@ class SPEA2:
                 solution.raw_fitness = sum(d.strength for d in solution.dominators)
                 solution.fitness = solution.raw_fitness + solution.density
 
+            next_archive = [s for s in union if s.fitness < 1]
+
     def generate_initial_population(self):
         """Returns the initial population."""
         population = []
