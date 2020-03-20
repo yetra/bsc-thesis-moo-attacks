@@ -65,6 +65,22 @@ class SPEA2:
                 fill_count = len(archive) - len(next_archive)
                 next_archive += union[:fill_count]
 
+            elif len(next_archive) > len(archive):  # TODO iterative truncation
+                for solution in next_archive:
+                    distances = []
+
+                    for other in next_archive:
+                        distance = self.euclidean_distance(solution, other)
+                        distances.append(distance)
+
+                    distances.sort()
+                    solution.kth_distance = distances[k]
+
+                next_archive.sort()  # TODO implement comparison operator
+
+                remove_count = len(next_archive) - len(archive)
+                next_archive = next_archive[remove_count:]
+
     def generate_initial_population(self):
         """Returns the initial population."""
         population = []
