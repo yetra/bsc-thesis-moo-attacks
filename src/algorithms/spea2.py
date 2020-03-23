@@ -111,23 +111,23 @@ class SPEA2:
 
         return next_archive
 
-    def archive_truncation(self, next_archive, length):
+    def archive_truncation(self, archive, desired_length):
         """Truncates the given archive to the desired length."""
-        while len(next_archive) > length:
-            k = int(math.sqrt(len(next_archive)))
+        while len(archive) > desired_length:
+            k = int(math.sqrt(len(archive)))
 
-            for solution in next_archive:
+            for solution in archive:
                 distances = []
 
-                for other in next_archive:
+                for other in archive:
                     distance = self.euclidean_distance(solution, other)
                     distances.append(distance)
 
                 distances.sort()
                 solution.density = 1.0 / (distances[k] + 2.0)
 
-            next_archive.sort(key=lambda s: s.density, reverse=True)
-            next_archive.pop()
+            archive.sort(key=lambda s: s.density, reverse=True)
+            archive.pop()
 
     def euclidean_distance(self, first_solution, second_solution):
         """Returns the Euclidean distance between the given solutions."""
