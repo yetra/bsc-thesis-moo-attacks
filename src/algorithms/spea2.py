@@ -48,21 +48,7 @@ class SPEA2:
                 next_archive += union[:fill_count]
 
             elif len(next_archive) > len(archive):
-                while len(next_archive) > len(archive):
-                    k = int(math.sqrt(len(next_archive)))
-
-                    for solution in next_archive:
-                        distances = []
-
-                        for other in next_archive:
-                            distance = self.euclidean_distance(solution, other)
-                            distances.append(distance)
-
-                        distances.sort()
-                        solution.density = 1.0 / (distances[k] + 2.0)
-
-                    next_archive.sort(key=lambda s: s.density, reverse=True)
-                    next_archive.pop()
+                self.archive_truncation(next_archive, len(archive))
 
             population = self.generate_next_population(next_archive)
             archive = next_archive
@@ -118,6 +104,24 @@ class SPEA2:
         for solution in union:
             solution.raw_fitness = sum(d.strength for d in solution.dominators)
             solution.fitness = solution.raw_fitness + solution.density
+
+    def archive_truncation(self, next_archive, length):
+        """Truncates the given archive to the desired length."""
+        while len(next_archive) > length:
+            k = int(math.sqrt(len(next_archive)))
+
+            for solution in next_archive:
+                distances = []
+
+                for other in next_archive:
+                    distance = self.euclidean_distance(solution, other)
+                    distances.append(distance)
+
+                distances.sort()
+                solution.density = 1.0 / (distances[k] + 2.0)
+
+            next_archive.sort(key=lambda s: s.density, reverse=True)
+            next_archive.pop()
 
     def euclidean_distance(self, first_solution, second_solution):
         """Returns the Euclidean distance between the given solutions."""
