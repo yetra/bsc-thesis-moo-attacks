@@ -38,25 +38,7 @@ class SPEA2:
         iteration = 0
         while iteration < self.max_iterations:
             union = population + archive
-            k = int(math.sqrt(len(union)))
-
-            for solution in union:
-                distances = []
-
-                for candidate in union:
-                    distance = self.euclidean_distance(solution, candidate)
-                    distances.append(distance)
-
-                    if solution.dominates(candidate):
-                        candidate.dominators.append(solution)
-                        solution.strength += 1
-
-                distances.sort()
-                solution.density = 1.0 / (distances[k] + 2.0)
-
-            for solution in union:
-                solution.raw_fitness = sum(d.strength for d in solution.dominators)
-                solution.fitness = solution.raw_fitness + solution.density
+            self.fitness_assignment(union)
 
             next_archive = [s for s in union if s.fitness < 1]
 
@@ -113,6 +95,28 @@ class SPEA2:
                 offspring.append(child)
 
         return offspring
+
+    def fitness_assignment(self, union):
+        """Assigns fitness values to all solutions in the given union."""
+        k = int(math.sqrt(len(union)))
+
+        for solution in union:
+            distances = []
+
+            for candidate in union:
+                distance = self.euclidean_distance(solution, candidate)
+                distances.append(distance)
+
+                if solution.dominates(candidate):
+                    candidate.dominators.append(solution)
+                    solution.strength += 1
+
+            distances.sort()
+            solution.density = 1.0 / (distances[k] + 2.0)
+
+        for solution in union:
+            solution.raw_fitness = sum(d.strength for d in solution.dominators)
+            solution.fitness = solution.raw_fitness + solution.density
 
     def euclidean_distance(self, first_solution, second_solution):
         """Returns the Euclidean distance between the given solutions."""
