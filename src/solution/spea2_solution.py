@@ -1,3 +1,5 @@
+import math
+
 from solution.solution import Solution
 
 
@@ -29,3 +31,13 @@ class SPEA2Solution(Solution):
         self.density = -1
         self.raw_fitness = -1
         self.fitness = -1
+
+    def euclidean_distance(self, other):
+        """Returns the objective-space Euclidean distance to the given other
+        solution."""
+        distance = 0.0
+
+        for o1, o2 in zip(self.objectives, other.objectives):
+            distance += (o2 - o1) ** 2
+
+        return math.sqrt(distance)

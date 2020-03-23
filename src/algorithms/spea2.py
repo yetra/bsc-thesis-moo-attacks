@@ -82,7 +82,7 @@ class SPEA2:
             distances = []
 
             for candidate in union:
-                distance = self.euclidean_distance(solution, candidate)
+                distance = solution.euclidean_distance(candidate)
                 distances.append(distance)
 
                 if solution.dominates(candidate):
@@ -120,7 +120,7 @@ class SPEA2:
                 distances = []
 
                 for other in archive:
-                    distance = self.euclidean_distance(solution, other)
+                    distance = solution.euclidean_distance(other)
                     distances.append(distance)
 
                 distances.sort()
@@ -128,12 +128,3 @@ class SPEA2:
 
             archive.sort(key=lambda s: s.density, reverse=True)
             archive.pop()
-
-    def euclidean_distance(self, first_solution, second_solution):
-        """Returns the Euclidean distance between the given solutions."""
-        distance = 0.0
-
-        for o1, o2 in zip(first_solution.objectives, second_solution.objectives):
-            distance += (o2 - o1) ** 2
-
-        return math.sqrt(distance)
