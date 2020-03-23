@@ -47,21 +47,22 @@ class SPEA2:
                 fill_count = len(archive) - len(next_archive)
                 next_archive += union[:fill_count]
 
-            elif len(next_archive) > len(archive):  # TODO iterative truncation
-                for solution in next_archive:
-                    distances = []
+            elif len(next_archive) > len(archive):
+                while len(next_archive) > len(archive):
+                    k = int(math.sqrt(len(next_archive)))
 
-                    for other in next_archive:
-                        distance = self.euclidean_distance(solution, other)
-                        distances.append(distance)
+                    for solution in next_archive:
+                        distances = []
 
-                    distances.sort()
-                    solution.kth_distance = distances[k]
+                        for other in next_archive:
+                            distance = self.euclidean_distance(solution, other)
+                            distances.append(distance)
 
-                next_archive.sort()  # TODO implement comparison operator
+                        distances.sort()
+                        solution.density = 1.0 / (distances[k] + 2.0)
 
-                remove_count = len(next_archive) - len(archive)
-                next_archive = next_archive[remove_count:]
+                    next_archive.sort(key=lambda s: s.density, reverse=True)
+                    next_archive.pop()
 
             population = self.generate_next_population(next_archive)
             archive = next_archive
