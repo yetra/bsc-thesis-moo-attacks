@@ -40,18 +40,9 @@ class SPEA2:
             union = population + archive
             self.fitness_assignment(union)
 
-            next_archive = [s for s in union if s.fitness < 1]
-
-            if len(next_archive) < len(archive):
-                union.sort(key=lambda s: s.fitness, reverse=True)
-                fill_count = len(archive) - len(next_archive)
-                next_archive += union[:fill_count]
-
-            elif len(next_archive) > len(archive):
-                self.archive_truncation(next_archive, len(archive))
-
-            population = self.generate_next_population(next_archive)
-            archive = next_archive
+            archive = self.environmental_selection(union, len(archive))
+            population = self.generate_next_population(archive)
+            
             iteration += 1
 
         return archive
@@ -104,6 +95,21 @@ class SPEA2:
         for solution in union:
             solution.raw_fitness = sum(d.strength for d in solution.dominators)
             solution.fitness = solution.raw_fitness + solution.density
+
+    def environmental_selection(self, union, archive_length):
+        """Applies environmental selection to the given union and returns
+        the obtained new archive."""
+        next_archive = [s for s in union if s.fitness < 1]
+
+        if len(next_archive) < archive_length:
+            union.sort(key=lambda s: s.fitness, reverse=True)
+            fill_count = archive_length - len(next_archive)
+            next_archive += union[:fill_count]  # TODO s.fitness >= 1 ?
+
+        elif len(next_archive) > archive_length:
+            self.archive_truncation(next_archive, archive_length)
+
+        return next_archive
 
     def archive_truncation(self, next_archive, length):
         """Truncates the given archive to the desired length."""
