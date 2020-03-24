@@ -39,7 +39,7 @@ class SPEA2:
 
         iteration = 0
         while iteration < self.max_iterations:
-            print(f'i={iteration}')
+            # print(f'i={iteration}')
 
             union = population + archive
             self.fitness_assignment(union)
@@ -83,6 +83,7 @@ class SPEA2:
         k = int(math.sqrt(len(union)))
 
         for solution in union:
+            solution.strength = 0
             distances = []
 
             for candidate in union:
@@ -99,6 +100,7 @@ class SPEA2:
         for solution in union:
             solution.raw_fitness = sum(d.strength for d in solution.dominators)
             solution.fitness = solution.raw_fitness + solution.density
+            solution.dominators = []
 
     def environmental_selection(self, union):
         """Applies environmental selection to the given union and returns
