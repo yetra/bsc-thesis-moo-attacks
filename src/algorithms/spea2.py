@@ -12,18 +12,20 @@ class SPEA2:
     Attributes:
         problem: the multi-objective optimization problem to solve
         population_size: the size of the population
+        archive_size: the size of the archive
         max_iterations: the maximum number of algorithm iterations
         crossover: the crossover operator to use
         mutation: the mutation operator to use
         selection: the selection operator to use
     """
 
-    def __init__(self, problem, population_size, max_iterations, crossover,
-                 mutation, selection):
+    def __init__(self, problem, population_size, archive_size, max_iterations,
+                 crossover, mutation, selection):
         """Initializes SPEA2 attributes."""
         self.problem = problem
 
         self.population_size = population_size
+        self.archive_size = archive_size
         self.max_iterations = max_iterations
 
         self.crossover = crossover
@@ -40,7 +42,7 @@ class SPEA2:
             union = population + archive
             self.fitness_assignment(union)
 
-            archive = self.environmental_selection(union, len(archive))
+            archive = self.environmental_selection(union)
             population = self.generate_next_population(archive)
             
             iteration += 1
@@ -96,24 +98,24 @@ class SPEA2:
             solution.raw_fitness = sum(d.strength for d in solution.dominators)
             solution.fitness = solution.raw_fitness + solution.density
 
-    def environmental_selection(self, union, archive_length):
+    def environmental_selection(self, union):
         """Applies environmental selection to the given union and returns
         the obtained new archive."""
         next_archive = [s for s in union if s.fitness < 1]
 
-        if len(next_archive) < archive_length:
+        if len(next_archive) < self.archive_size:
             union.sort(key=lambda s: s.fitness, reverse=True)
-            fill_count = archive_length - len(next_archive)
+            fill_count = self.archive_size - len(next_archive)
             next_archive += union[:fill_count]  # TODO s.fitness >= 1 ?
 
-        elif len(next_archive) > archive_length:
-            self.archive_truncation(next_archive, archive_length)
+        elif len(next_archive) > self.archive_size:
+            self.archive_truncation(next_archive)
 
         return next_archive
 
-    def archive_truncation(self, archive, desired_length):
-        """Truncates the given archive to the desired length."""
-        while len(archive) > desired_length:
+    def archive_truncation(self, archive):
+        """Truncates the given archive to archive_size."""
+        while len(archive) > self.archive_size:
             k = int(math.sqrt(len(archive)))
 
             for solution in archive:
