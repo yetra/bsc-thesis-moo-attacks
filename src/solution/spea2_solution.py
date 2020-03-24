@@ -32,6 +32,9 @@ class SPEA2Solution(Solution):
         self.raw_fitness = -1
         self.fitness = -1
 
+    def __gt__(self, other):
+        return self.fitness > other.fitness
+
     def euclidean_distance(self, other):
         """Returns the objective-space Euclidean distance to the given other
         solution."""
