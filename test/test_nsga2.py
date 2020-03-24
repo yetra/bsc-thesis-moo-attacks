@@ -12,7 +12,7 @@ if __name__ == '__main__':
     population_size = 100
     max_iterations = 100
 
-    crossover = ArithmeticCrossover(0.5, problem)
+    crossover = ArithmeticCrossover(0.7, problem)
     mutation = GaussianMutation(0.0, 1.0, 0.03, problem)
     selection = TournamentSelection(2)
 
