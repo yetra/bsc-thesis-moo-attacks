@@ -133,7 +133,7 @@ class SPEA2:
                     distances.append(distance)
 
                 distances.sort()
-                solution.density = 1.0 / (distances[k] + 2.0)
+                solution.density = distances[k]  # TODO add separate attribute
 
             archive.sort(key=lambda s: s.density, reverse=True)
             archive.pop()
