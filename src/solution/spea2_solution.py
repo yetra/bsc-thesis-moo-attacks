@@ -26,7 +26,7 @@ class SPEA2Solution(Solution):
         super().__init__(problem)
 
         self.dominators = []
-        self.strength = -1
+        self.strength = 0
 
         self.density = -1
         self.raw_fitness = -1
