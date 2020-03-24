@@ -33,7 +33,8 @@ class SPEA2Solution(Solution):
         self.fitness = -1
 
     def __gt__(self, other):
-        return self.fitness > other.fitness
+        """Applies the fitness comparison operator (for minimization)."""
+        return self.fitness < other.fitness
 
     def euclidean_distance(self, other):
         """Returns the objective-space Euclidean distance to the given other
