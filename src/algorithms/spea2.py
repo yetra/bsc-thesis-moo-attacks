@@ -106,9 +106,14 @@ class SPEA2:
         next_archive = [s for s in union if s.fitness < 1]
 
         if len(next_archive) < self.archive_size:
-            union.sort(key=lambda s: s.fitness, reverse=True)
-            fill_count = self.archive_size - len(next_archive)
-            next_archive += union[:fill_count]  # TODO s.fitness >= 1 ?
+            union.sort(reverse=True)
+            
+            for solution in union:
+                if solution.fitness >= 1:
+                    next_archive.append(solution)
+
+                if len(next_archive) >= self.archive_size:
+                    break
 
         elif len(next_archive) > self.archive_size:
             self.archive_truncation(next_archive)
