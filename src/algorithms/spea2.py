@@ -39,7 +39,7 @@ class SPEA2:
 
         iteration = 0
         while iteration < self.max_iterations:
-            # print(f'i={iteration}')
+            print(f'i={iteration}')
 
             union = population + archive
             self.fitness_assignment(union)
