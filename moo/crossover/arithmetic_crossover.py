@@ -1,5 +1,5 @@
-from src.crossover.crossover import Crossover
-from src.solution.solution import Solution
+from moo.crossover.crossover import Crossover
+from moo.solution.solution import Solution
 
 
 class ArithmeticCrossover(Crossover):

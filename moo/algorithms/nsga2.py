@@ -1,6 +1,6 @@
 import math
 
-from src.solution.nsga2_solution import NSGA2Solution
+from moo.solution.nsga2_solution import NSGA2Solution
 
 
 class NSGA2:

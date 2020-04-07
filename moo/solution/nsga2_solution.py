@@ -1,4 +1,4 @@
-from src.solution.solution import Solution
+from moo.solution.solution import Solution
 
 
 class NSGA2Solution(Solution):

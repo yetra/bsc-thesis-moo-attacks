@@ -1,7 +1,7 @@
-from src.algorithms.nsga2 import NSGA2
-from src.crossover.arithmetic_crossover import ArithmeticCrossover
-from src.mutation.gaussian_mutation import GaussianMutation
-from src.selection.tournament_selection import TournamentSelection
+from moo.algorithms.nsga2 import NSGA2
+from moo.crossover.arithmetic_crossover import ArithmeticCrossover
+from moo.mutation.gaussian_mutation import GaussianMutation
+from moo.selection.tournament_selection import TournamentSelection
 # from test_problem1 import TestProblem1
 from test_problem2 import TestProblem2
 

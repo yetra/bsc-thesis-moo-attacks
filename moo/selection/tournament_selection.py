@@ -1,6 +1,6 @@
 import random
 
-from src.selection.selection import Selection
+from moo.selection.selection import Selection
 
 
 class TournamentSelection(Selection):

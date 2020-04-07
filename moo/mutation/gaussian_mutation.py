@@ -1,6 +1,6 @@
 import random
 
-from src.mutation.mutation import Mutation
+from moo.mutation.mutation import Mutation
 
 
 class GaussianMutation(Mutation):

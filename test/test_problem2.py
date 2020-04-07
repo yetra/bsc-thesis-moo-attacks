@@ -1,4 +1,4 @@
-from src.problem import Problem
+from moo.problem import Problem
 
 
 class TestProblem2(Problem):
