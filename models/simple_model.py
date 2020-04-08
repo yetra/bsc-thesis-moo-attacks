@@ -4,6 +4,15 @@ from keras.layers import Dense, Activation
 from keras.models import Sequential
 from matplotlib import pyplot as plt
 
+INPUT_SIZE = 28 * 28
+OUTPUT_SIZE = 10
+
+LAYER_SIZES = [512, OUTPUT_SIZE]
+ACTIVATION_FUNCTIONS = ['sigmoid', 'softmax']
+
+BATCH_SIZE = 128
+EPOCHS = 10
+
 
 def prepare_data(input_size, output_size):
     """Prepares the MNIST dataset for training."""
@@ -56,9 +65,9 @@ def plot_results(history):
 
 def main():
     """Builds, trains and displays the results of a model."""
-    x_train, y_train, x_test, y_test = prepare_data(28 * 28, 10)
+    x_train, y_train, x_test, y_test = prepare_data(INPUT_SIZE, OUTPUT_SIZE)
 
-    model = build_model(28 * 28, [512, 10], ['sigmoid', 'softmax'])
+    model = build_model(INPUT_SIZE, LAYER_SIZES, ACTIVATION_FUNCTIONS)
     model.summary()
 
     model.compile(optimizer='sgd',
@@ -66,7 +75,7 @@ def main():
                   metrics=['accuracy'])
 
     history = model.fit(x_train, y_train,
-                        batch_size=128, epochs=10,
+                        batch_size=BATCH_SIZE, epochs=EPOCHS,
                         validation_split=.1, verbose=False)
 
     plot_results(history)
