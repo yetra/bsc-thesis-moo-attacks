@@ -52,3 +52,28 @@ def plot_results(history):
     plt.xlabel('epoch')
     plt.legend(['training', 'validation'], loc='best')
     plt.show()
+
+
+def main():
+    """Builds, trains and displays the results of a model."""
+    x_train, y_train, x_test, y_test = prepare_data(28 * 28, 10)
+
+    model = build_model(28 * 28, [512, 10], ['sigmoid', 'softmax'])
+    model.summary()
+
+    model.compile(optimizer='sgd',
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    history = model.fit(x_train, y_train,
+                        batch_size=128, epochs=10,
+                        validation_split=.1, verbose=False)
+
+    plot_results(history)
+
+    loss, accuracy = model.evaluate(x_test, y_test, verbose=False)
+    print(f'\ntest loss: {loss:.3}, test accuracy: {accuracy:.3}')
+
+
+if __name__ == '__main__':
+    main()
