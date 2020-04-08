@@ -37,3 +37,18 @@ def build_model(input_size, layer_sizes, activation_functions):
         model.add(Activation(activation_functions[i + 1]))
 
     return model
+
+
+def plot_results(history):
+    """
+    Plots the model's accuracy over epochs on the training and validation sets.
+
+    :param history: a History object containing loss and metrics values
+    """
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['training', 'validation'], loc='best')
+    plt.show()
