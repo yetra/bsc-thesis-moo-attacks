@@ -2,6 +2,8 @@ from keras.layers import Dense, Activation, Conv2D, Flatten, Dropout, \
     MaxPooling2D
 from keras.models import Sequential
 
+import util
+
 INPUT_SHAPE = (28, 28, 1)
 OUTPUTS = 10
 
@@ -44,3 +46,26 @@ def build_model(input_shape, layer_sizes, activation_functions):
     model.add(Activation(activation_functions[5]))
 
     return model
+
+
+def main():
+    """Builds, trains and displays the results of a model."""
+    x_train, y_train, x_test, y_test = util.load_mnist(INPUT_SHAPE, OUTPUTS)
+
+    model = build_model(INPUT_SHAPE, LAYER_SIZES, ACTIVATION_FUNCTIONS)
+    model.summary()
+
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam', metrics=['accuracy'])
+
+    history = model.fit(x_train, y_train, epochs=EPOCHS,
+                        batch_size=BATCH_SIZE, validation_split=.1)
+
+    util.plot_results(history)
+
+    loss, accuracy = model.evaluate(x_test, y_test, verbose=False)
+    print(f'\ntest loss: {loss:.3}, test accuracy: {accuracy:.3}')
+
+
+if __name__ == '__main__':
+    main()
