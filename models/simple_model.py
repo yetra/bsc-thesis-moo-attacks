@@ -7,11 +7,11 @@ from matplotlib import pyplot as plt
 INPUT_SIZE = 28 * 28
 OUTPUT_SIZE = 10
 
-LAYER_SIZES = [512, OUTPUT_SIZE]
-ACTIVATION_FUNCTIONS = ['sigmoid', 'softmax']
+LAYER_SIZES = [128, OUTPUT_SIZE]
+ACTIVATION_FUNCTIONS = ['relu', 'softmax']
 
 BATCH_SIZE = 128
-EPOCHS = 10
+EPOCHS = 40
 
 
 def prepare_data(input_size, output_size):
@@ -73,13 +73,11 @@ def main():
     model = build_model(INPUT_SIZE, LAYER_SIZES, ACTIVATION_FUNCTIONS)
     model.summary()
 
-    model.compile(optimizer='sgd',
-                  loss='categorical_crossentropy',
-                  metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='sgd', metrics=['accuracy'])
 
-    history = model.fit(x_train, y_train,
-                        batch_size=BATCH_SIZE, epochs=EPOCHS,
-                        validation_split=.1, verbose=False)
+    history = model.fit(x_train, y_train, epochs=EPOCHS,
+                        batch_size=BATCH_SIZE, validation_split=.1)
 
     plot_results(history)
 
