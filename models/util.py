@@ -1,5 +1,6 @@
 import keras
 from keras.datasets import mnist
+from matplotlib import pyplot as plt
 
 
 def load_mnist(input_shape, num_of_outputs):
@@ -22,3 +23,26 @@ def load_mnist(input_shape, num_of_outputs):
     y_test = keras.utils.to_categorical(y_test, num_of_outputs)
 
     return x_train, y_train, x_test, y_test
+
+
+def plot_results(history):
+    """
+    Plots a model's accuracy & loss values for the training & validation sets.
+
+    :param history: a History object containing loss and metrics values
+    """
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['training', 'validation'], loc='best')
+    plt.show()
+
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['training', 'validation'], loc='best')
+    plt.show()
