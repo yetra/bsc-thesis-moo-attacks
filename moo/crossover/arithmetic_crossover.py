@@ -23,12 +23,12 @@ class ArithmeticCrossover(Crossover):
         """Returns two child solutions obtained by arithmetic crossover."""
         variables = (self.alpha * first_parent.variables
                      + (1 - self.alpha) * second_parent.variables)
-        np.clip(variables, self.problem.mins, self.problem.maxs)
+        np.clip(variables, self.problem.mins, self.problem.maxs, out=variables)
         first_child = first_parent.__class__(self.problem, variables)
 
         variables = ((1 - self.alpha) * first_parent.variables
                      + self.alpha * second_parent.variables)
-        np.clip(variables, self.problem.mins, self.problem.maxs)
+        np.clip(variables, self.problem.mins, self.problem.maxs, out=variables)
         second_child = second_parent.__class__(self.problem, variables)
 
         return first_child, second_child

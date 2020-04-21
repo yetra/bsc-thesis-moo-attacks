@@ -31,4 +31,5 @@ class GaussianMutation(Mutation):
             if random.random() <= self.probability:
                 solution.variables[i] += random.gauss(self.mu, self.sigma)
 
-        np.clip(solution.variables, self.problem.mins, self.problem.maxs)
+        np.clip(solution.variables, self.problem.mins, self.problem.maxs,
+                out=solution.variables)
