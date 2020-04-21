@@ -10,16 +10,17 @@ class NSGA2Solution(Solution):
         crowding_distance: the crowding distance value of this solution
         rank: the rank of this solution
     """
-    
-    def __init__(self, problem=None):
-        """Initializes Solution attributes.
 
-        If problem is not None, the decision vector's values will
-        be randomized.
+    def __init__(self, problem, variables=None):
+        """Initializes NSGA2Solution attributes.
+
+        If the given decision variables vector is None, the variables vector
+        will be initialized with random values.
 
         :param problem: an instance of Problem - the MOOP to optimize
+        :param variables: the decision variables vector
         """
-        super().__init__(problem)
+        super().__init__(problem, variables)
 
         self.dominates_list = []
         self.dominated_by = -1
