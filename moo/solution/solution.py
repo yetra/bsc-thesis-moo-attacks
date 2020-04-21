@@ -22,7 +22,7 @@ class Solution:
         self.problem = problem
 
         if variables is None:
-            self.variables = np.random.uniform(0, 1, problem.variables_count)
+            self.variables = np.random.uniform(problem.mins, problem.maxs)
         else:
             self.variables = variables
 
