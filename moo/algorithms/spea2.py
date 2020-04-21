@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 from solution.spea2_solution import SPEA2Solution
 
@@ -80,15 +80,15 @@ class SPEA2:
 
     def fitness_assignment(self, union):
         """Assigns fitness values to all solutions in the given union."""
-        k = int(math.sqrt(len(union)))
+        k = int(np.sqrt(len(union)))
 
         for solution in union:
             solution.strength = 0
             distances = []
 
             for candidate in union:
-                distance = solution.euclidean_distance(candidate)
-                distances.append(distance)
+                distances.append(np.linalg.norm(
+                    solution.objectives, candidate.objectives))
 
                 if solution.dominates(candidate):
                     candidate.dominators.append(solution)
@@ -125,14 +125,14 @@ class SPEA2:
     def archive_truncation(self, archive):
         """Truncates the given archive to archive_size."""
         while len(archive) > self.archive_size:
-            k = int(math.sqrt(len(archive)))
+            k = int(np.sqrt(len(archive)))
 
             for solution in archive:
                 distances = []
 
                 for other in archive:
-                    distance = solution.euclidean_distance(other)
-                    distances.append(distance)
+                    distances.append(np.linalg.norm(
+                        solution.objectives, other.objectives))
 
                 distances.sort()
                 solution.density = distances[k]  # TODO add separate attribute
