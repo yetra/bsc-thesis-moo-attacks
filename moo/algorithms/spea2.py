@@ -88,7 +88,7 @@ class SPEA2:
 
             for candidate in union:
                 distances.append(np.linalg.norm(
-                    solution.objectives, candidate.objectives))
+                    solution.objectives - candidate.objectives))
 
                 if solution.dominates(candidate):
                     candidate.dominators.append(solution)
@@ -132,7 +132,7 @@ class SPEA2:
 
                 for other in archive:
                     distances.append(np.linalg.norm(
-                        solution.objectives, other.objectives))
+                        solution.objectives - other.objectives))
 
                 distances.sort()
                 solution.density = distances[k]  # TODO add separate attribute
