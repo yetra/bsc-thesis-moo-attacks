@@ -5,7 +5,6 @@ class Solution:
     """Models a multi-objective optimization problem's solution.
 
     Attributes:
-        problem: the multi-objective optimization problem
         variables: the decision variables vector
         objectives: the objectives in a given decision variables vector
     """
@@ -19,8 +18,6 @@ class Solution:
         :param problem: an instance of Problem - the MOOP to optimize
         :param variables: the decision variables vector
         """
-        self.problem = problem
-
         if variables is None:
             self.variables = np.random.uniform(problem.mins, problem.maxs)
         else:
