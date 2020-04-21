@@ -1,5 +1,7 @@
 import random
 
+import numpy as np
+
 from moo.mutation.mutation import Mutation
 
 
@@ -28,4 +30,5 @@ class GaussianMutation(Mutation):
         for i in range(len(solution.variables)):
             if random.random() <= self.probability:
                 solution.variables[i] += random.gauss(self.mu, self.sigma)
-                self.problem.check_constraints(solution, i)
+
+        np.clip(solution.variables, self.problem.mins, self.problem.maxs)

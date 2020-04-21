@@ -25,19 +25,6 @@ class Problem(ABC):
         self.objective_mins = []
         self.objective_maxs = []
 
-    def check_constraints(self, solution, index):
-        """
-        Updates a solution's variable at the given index so that it satisfies
-        problem constraints.
-
-        :param solution: the solution to update
-        :param index: the index of the solution variable to update
-        """
-        if solution.variables[index] < self.mins[index]:
-            solution.variables[index] = self.mins[index]
-        elif solution.variables[index] > self.maxs[index]:
-            solution.variables[index] = self.maxs[index]
-
     @abstractmethod
     def evaluate(self, solution):
         """Evaluates the given solution."""
