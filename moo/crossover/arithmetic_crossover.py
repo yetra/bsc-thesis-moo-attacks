@@ -19,19 +19,15 @@ class ArithmeticCrossover(Crossover):
 
     def of(self, first_parent, second_parent):
         """Returns two child solutions obtained by arithmetic crossover."""
-        first_child = first_parent.__class__()
-        second_child = second_parent.__class__()
+        variables = (self.alpha * first_parent.variables
+                     + (1 - self.alpha) * second_parent.variables)
+        first_child = first_parent.__class__(first_parent.problem, variables)
 
-        for i, (v1, v2) in enumerate(zip(first_parent.variables,
-                                         second_parent.variables)):
+        variables = ((1 - self.alpha) * first_parent.variables
+                     + self.alpha * second_parent.variables)
+        second_child = second_parent.__class__(first_parent.problem, variables)
 
-            first_child.variables.append(self.alpha * v1
-                                         + (1 - self.alpha) * v2)
-
-            second_child.variables.append((1 - self.alpha) * v1
-                                          + self.alpha * v2)
-
-            self.problem.check_constraints(first_child, i)
-            self.problem.check_constraints(second_child, i)
+        self.problem.check_constraints(first_child)
+        self.problem.check_constraints(second_child)
 
         return first_child, second_child
