@@ -15,7 +15,8 @@ class NSGA2:
         selection: the selection operator to use
     """
 
-    def __init__(self, problem, population_size, max_iterations, crossover, mutation, selection):
+    def __init__(self, problem, population_size, max_iterations, crossover,
+                 mutation, selection):
         """Initializes NSGA2 attributes."""
         self.problem = problem
 
@@ -41,7 +42,8 @@ class NSGA2:
             next_population = []
             front_index = 0
 
-            while len(next_population) + len(fronts[front_index]) <= self.population_size:
+            while (len(next_population) + len(fronts[front_index])
+                   <= self.population_size):
                 next_population += fronts[front_index]
                 front_index += 1
 
@@ -68,7 +70,12 @@ class NSGA2:
         return population
 
     def generate_offspring(self, parents):
-        """Generates population_size offspring from the given parent population."""
+        """
+        Generates population_size offspring from the given parent population.
+
+        :param parents: the parent population
+        :return: a list of offspring
+        """
         offspring = []
 
         while len(offspring) < self.population_size:
@@ -84,7 +91,13 @@ class NSGA2:
         return offspring
 
     def fast_non_dominated_sort(self, population):
-        """Returns the fronts obtained by performing a non-dominated sort of the given population."""
+        """
+        Returns the fronts obtained by performing a non-dominated sort of
+        the given population.
+
+        :param population: the population to sort
+        :return: the fronts
+        """
         current_front = []
 
         for solution in population:
@@ -123,7 +136,11 @@ class NSGA2:
         return fronts
 
     def crowding_distance_assignment(self, front):
-        """Assigns crowding distance values to all solutions in the given front."""
+        """
+        Assigns crowding distance values to all solutions in the given front.
+
+        :param front: the front containing solutions
+        """
         for solution in front:
             solution.crowding_distance = 0
 
@@ -134,6 +151,10 @@ class NSGA2:
             front.sort(key=lambda ind: ind.objectives[i])
 
             for j in range(1, len(front) - 1):
-                neighbors_diff = front[j + 1].objectives[i] - front[j - 1].objectives[i]
-                max_diff = self.problem.objective_maxs[i] - self.problem.objective_mins[i]
+                neighbors_diff = (front[j + 1].objectives[i]
+                                  - front[j - 1].objectives[i])
+
+                max_diff = (self.problem.objective_maxs[i]
+                            - self.problem.objective_mins[i])
+
                 front[j].crowding_distance += neighbors_diff / max_diff

@@ -31,7 +31,10 @@ class TestProblem1(Problem):
             objective = v * v
             solution.objectives.append(objective)
 
-            if self.objective_mins[i] is None or objective < self.objective_mins[i]:
+            if (self.objective_mins[i] is None
+                    or objective < self.objective_mins[i]):
                 self.objective_mins[i] = objective
-            elif self.objective_maxs[i] is None or objective > self.objective_maxs[i]:
+
+            elif (self.objective_maxs[i] is None
+                  or objective > self.objective_maxs[i]):
                 self.objective_maxs[i] = objective

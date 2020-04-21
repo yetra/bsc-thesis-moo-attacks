@@ -17,11 +17,10 @@ class SPEA2Solution(Solution):
     def __init__(self, problem=None):
         """Initializes Solution attributes.
 
-        If the problem argument is not None, the decision vector's values will
+        If problem is not None, the decision vector's values will
         be randomized.
 
-        Args:
-            problem: an object representing the MOOP to optimize
+        :param problem: an instance of Problem - the MOOP to optimize
         """
         super().__init__(problem)
 
@@ -37,8 +36,7 @@ class SPEA2Solution(Solution):
         return self.fitness < other.fitness
 
     def euclidean_distance(self, other):
-        """Returns the objective-space Euclidean distance to the given other
-        solution."""
+        """Returns the objective-space Euclidean distance between solutions."""
         distance = 0.0
 
         for o1, o2 in zip(self.objectives, other.objectives):

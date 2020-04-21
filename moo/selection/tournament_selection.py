@@ -6,8 +6,8 @@ from moo.selection.selection import Selection
 class TournamentSelection(Selection):
     """An implementation of tournament selection.
 
-    The best solution is selected from a tournament of randomly chosen solutions
-    from a given population.
+    The best solution is selected from a tournament of randomly chosen
+    solutions from a given population.
 
     Attributes:
         tournament_size: the size of the tournament

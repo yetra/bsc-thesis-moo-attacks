@@ -12,10 +12,10 @@ class Solution:
     def __init__(self, problem=None):
         """Initializes Solution attributes.
 
-        If the problem argument is not None, the decision vector's values will be randomized.
+        If problem is not None, the decision vector's values will
+        be randomized.
 
-        Args:
-            problem: an object representing the MOOP to optimize
+        :param problem: an instance of Problem - the MOOP to optimize
         """
         self.variables = []
         self.objectives = []
@@ -26,8 +26,8 @@ class Solution:
     def randomize(self, problem):
         """Randomizes the decision space variables of this solution.
 
-        Args:
-            problem: the MOOP object containing info on the decision space dimension and constraints
+        :param problem: an instance of Problem containing info on the dimension
+                        of the decision space and variable constraints
         """
         for min_v, max_v in zip(problem.mins, problem.maxs):
             self.variables.append(random.uniform(min_v, max_v))

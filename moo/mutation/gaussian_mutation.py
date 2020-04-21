@@ -6,8 +6,8 @@ from moo.mutation.mutation import Mutation
 class GaussianMutation(Mutation):
     """An implementation of Gaussian mutation.
 
-    A Gaussian distributed random value is added to a solution's decision vector variables
-    with the specified probability.
+    A Gaussian distributed random value is added to a solution's decision
+    vector variables with the specified probability.
 
     Attributes:
         mu: the mean

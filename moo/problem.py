@@ -5,7 +5,8 @@ class Problem(ABC):
     """Models a multi-objective optimization problem.
 
     Attributes:
-        variables_count: the number of decision space variables that this problem requires
+        variables_count: the number of decision space variables that this
+                         problem requires
         objectives_count: the number of objectives to optimize
         mins: the lowest possible values of each decision space variable
         maxs: the highest possible values of each decision space variable
@@ -25,7 +26,13 @@ class Problem(ABC):
         self.objective_maxs = []
 
     def check_constraints(self, solution, index):
-        """Updates a solution's variable at the given index so that it satisfies the constraints."""
+        """
+        Updates a solution's variable at the given index so that it satisfies
+        problem constraints.
+
+        :param solution: the solution to update
+        :param index: the index of the solution variable to update
+        """
         if solution.variables[index] < self.mins[index]:
             solution.variables[index] = self.mins[index]
         elif solution.variables[index] > self.maxs[index]:

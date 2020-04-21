@@ -6,7 +6,7 @@ class NSGA2Solution(Solution):
 
     Attributes:
         dominates_list: a list of all solutions that this solution dominates
-        dominated_by: the number of solutions that this solution is dominated by
+        dominated_by: the number of solutions that dominate this solution
         crowding_distance: the crowding distance value of this solution
         rank: the rank of this solution
     """
@@ -14,10 +14,10 @@ class NSGA2Solution(Solution):
     def __init__(self, problem=None):
         """Initializes Solution attributes.
 
-        If the problem argument is not None, the decision vector's values will be randomized.
+        If problem is not None, the decision vector's values will
+        be randomized.
 
-        Args:
-            problem: an object representing the MOOP to optimize
+        :param problem: an instance of Problem - the MOOP to optimize
         """
         super().__init__(problem)
 

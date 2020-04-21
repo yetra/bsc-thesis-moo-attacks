@@ -6,4 +6,4 @@ class Crossover(ABC):
 
     @abstractmethod
     def of(self, first_parent, second_parent):
-        """Returns two child solutions obtained by crossing the given parents."""
+        """Returns two child solutions obtained by crossing the parents."""
