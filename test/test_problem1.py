@@ -1,3 +1,5 @@
+import numpy as np
+
 from moo.problem import Problem
 
 
@@ -25,11 +27,11 @@ class TestProblem1(Problem):
 
     def evaluate(self, solution):
         """Evaluates the given solution."""
-        solution.objectives = []
+        objectives = []
 
         for i, v in enumerate(solution.variables):
             objective = v * v
-            solution.objectives.append(objective)
+            objectives.append(objective)
 
             if (self.objective_mins[i] is None
                     or objective < self.objective_mins[i]):
@@ -38,3 +40,5 @@ class TestProblem1(Problem):
             elif (self.objective_maxs[i] is None
                   or objective > self.objective_maxs[i]):
                 self.objective_maxs[i] = objective
+
+        solution.objectives = np.array(objectives)
