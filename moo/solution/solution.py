@@ -29,10 +29,10 @@ class Solution:
         """Returns True if this solution dominates the given solution."""
         is_strictly_better = False
 
-        for i in range(len(self.objectives)):
-            if self.objectives[i] > other.objectives[i]:
+        for o1, o2 in zip(self.objectives, other.objectives):
+            if o1 > o2:
                 return False
-            if self.objectives[i] < other.objectives[i]:
+            if o1 < o2:
                 is_strictly_better = True
 
         return is_strictly_better
