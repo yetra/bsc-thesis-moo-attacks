@@ -19,7 +19,8 @@ class Solution:
         :param variables: the decision variables vector
         """
         if variables is None:
-            self.variables = np.random.uniform(problem.mins, problem.maxs)
+            self.variables = np.random.uniform(problem.mins, problem.maxs,
+                                               problem.variables_count)
         else:
             self.variables = variables
 
