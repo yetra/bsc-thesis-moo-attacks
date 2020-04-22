@@ -4,6 +4,9 @@ from keras.models import Sequential
 
 import util
 
+MODEL_FILE = 'conv_model.json'
+WEIGHTS_FILE = 'conv_weights.h5'
+
 INPUT_SHAPE = (28, 28, 1)
 OUTPUTS = 10
 
@@ -65,6 +68,8 @@ def main():
 
     loss, accuracy = model.evaluate(x_test, y_test, verbose=False)
     print(f'\ntest loss: {loss:.3}, test accuracy: {accuracy:.3}')
+
+    util.save(model, MODEL_FILE, WEIGHTS_FILE)
 
 
 if __name__ == '__main__':
