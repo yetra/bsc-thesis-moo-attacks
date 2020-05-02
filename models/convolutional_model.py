@@ -2,6 +2,7 @@ from keras.layers import Dense, Activation, Conv2D, Flatten, Dropout, \
     MaxPooling2D
 from keras.models import Sequential
 
+import time
 import util
 
 MODEL_FILE = 'conv_model.json'
@@ -64,6 +65,29 @@ class ConvolutionalModel:
         model.add(Activation(self.activations[5]))
 
         return model
+
+    def train(self, data, epochs=40, batch_size=128):
+        """
+        Trains this model and saves the resulting weights.
+
+        :param data: a tuple of training and test data with labels
+        :param epochs: the number of epochs
+        :param batch_size: the batch size
+        """
+        x_train, y_train, x_test, y_test = data
+
+        self.model.compile(loss=self.LOSS, optimizer=self.OPTIMIZER,
+                           metrics=['accuracy'])
+
+        history = self.model.fit(x_train, y_train, epochs=epochs,
+                                 batch_size=batch_size, validation_split=.1)
+
+        util.plot_results(history)
+
+        loss, accuracy = self.model.evaluate(x_test, y_test, verbose=False)
+        print(f'\ntest loss: {loss:.3}, test accuracy: {accuracy:.3}')
+
+        self.model.save_weights(f'conv_{time.strftime("%Y%m%d_%H%M%S")}.h5')
 
 
 def build_model(input_shape, layer_sizes, activation_functions):
