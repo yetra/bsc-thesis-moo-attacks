@@ -1,6 +1,5 @@
 import keras
 from keras.datasets import mnist
-from keras.engine.saving import model_from_json
 from matplotlib import pyplot as plt
 
 
@@ -47,21 +46,3 @@ def plot_results(history):
     plt.xlabel('epoch')
     plt.legend(['training', 'validation'], loc='best')
     plt.show()
-
-
-def save(model, model_file, weights_file):
-    """Saves the given model and its weights to the specified files."""
-    with open(model_file, 'w') as json_file:
-        json_file.write(model.to_json())
-
-    model.save_weights(weights_file)
-
-
-def load(model_file, weights_file):
-    """Loads a model and its weights from the specified files."""
-    with open(model_file) as json_file:
-        loaded_model = model_from_json(json_file.read())
-
-    loaded_model.load_weights(weights_file)
-
-    return loaded_model
