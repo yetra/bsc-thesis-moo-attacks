@@ -49,7 +49,13 @@ class AttackModel(ABC):
         loss, accuracy = self.model.evaluate(x_test, y_test, verbose=False)
         print(f'\ntest loss: {loss:.3}, test accuracy: {accuracy:.3}')
 
-        self.model.save_weights(f'weights_{time.strftime("%Y%m%d_%H%M%S")}.h5')
+    def save(self, weights_path=None):
+        """Saves this model's weights to the specified path."""
+        if weights_path is None:
+            weights_path = (f'data/{type(self).__name__}'
+                            f'_{time.strftime("%Y%m%d_%H%M%S")}.h5')
+
+        self.model.save_weights(weights_path)
 
     def load(self, weights_path):
         """Compiles this model using weights loaded from the specified path."""
