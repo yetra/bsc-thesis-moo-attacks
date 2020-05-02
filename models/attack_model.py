@@ -1,11 +1,15 @@
-import time
 from abc import ABC, abstractmethod
+
+import time
+from typing import ClassVar
 
 import util
 
 
 class AttackModel(ABC):
     """The base class for attack models."""
+    LOSS: ClassVar[str]
+    OPTIMIZER: ClassVar[str]
 
     def __init__(self, layer_sizes, activations):
         """
