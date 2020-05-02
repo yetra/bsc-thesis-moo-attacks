@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 import time
 from typing import ClassVar
 
+import numpy as np
+
 import util
 
 
@@ -48,6 +50,10 @@ class AttackModel(ABC):
 
         loss, accuracy = self.model.evaluate(x_test, y_test, verbose=False)
         print(f'\ntest loss: {loss:.3}, test accuracy: {accuracy:.3}')
+
+    def predict(self, data):
+        """Returns the predictions obtained for the given data."""
+        return self.model.predict(np.array([data]))[0]
 
     def save(self, weights_path=None):
         """Saves this model's weights to the specified path."""
