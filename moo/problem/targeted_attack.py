@@ -1,15 +1,13 @@
 import numpy as np
 
-from problem import Problem
+from problem.problem import Problem
 
 
-class SimpleAttack(Problem):
-    """
-    A MOO problem for simple, non-targeted attacks on image recognition models.
-    """
+class TargetedAttack(Problem):
+    """A MOO problem for targeted attacks on image recognition models."""
 
     def __init__(self, model):
-        """Initializes AttackProblem attributes."""
+        """Initializes TargetedAttack attributes."""
         super().__init__()
 
         self.model = model
@@ -17,7 +15,7 @@ class SimpleAttack(Problem):
         self.variables_count = 28 * 28
         self.objectives_count = 2
 
-        self.mins = 0  # TODO
+        self.mins = 0
         self.maxs = 1
 
         self.objective_mins = [None, None]
@@ -28,7 +26,7 @@ class SimpleAttack(Problem):
         predictions = self.model.predict(orig_image + solution.variables)
         noise_strength = np.linalg.norm(solution.variables, ord=1)
 
-        solution.objectives = np.array([predictions[label], noise_strength])
+        solution.objectives = np.array([-predictions[label], noise_strength])
 
         for i, o in enumerate(solution.objectives):
             if self.objective_mins[i] is None or o < self.objective_mins[i]:
