@@ -89,6 +89,12 @@ class ConvolutionalModel:
 
         self.model.save_weights(f'conv_{time.strftime("%Y%m%d_%H%M%S")}.h5')
 
+    def load_weights(self, weights_path):
+        """Loads this model's weights and compiles the model."""
+        self.model.load_weights(weights_path)
+        self.model.compile(loss=self.LOSS, optimizer=self.OPTIMIZER,
+                           metrics=['accuracy'])
+
 
 def build_model(input_shape, layer_sizes, activation_functions):
     """
