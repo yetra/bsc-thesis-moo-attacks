@@ -6,8 +6,7 @@ from moo.crossover.crossover import Crossover
 class ArithmeticCrossover(Crossover):
     """An implementation of arithmetic crossover.
 
-    Two parent decision space vectors are linearly combines to produce
-    two new child solutions.
+    Two parent solutions are linearly combined to produce two child solutions.
 
     Attributes:
         alpha: the weighting factor to use in the linear combination
