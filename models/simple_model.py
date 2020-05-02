@@ -1,6 +1,7 @@
 from keras.layers import Dense, Activation
 from keras.models import Sequential
 
+import time
 import util
 
 MODEL_FILE = 'model.json'
@@ -14,6 +15,41 @@ ACTIVATION_FUNCTIONS = ['relu', 'softmax']
 
 BATCH_SIZE = 128
 EPOCHS = 40
+
+
+class SimpleModel:
+    """Models a simple, non-convolutional model."""
+    INPUT_SHAPE = (28 * 28, )
+    NUM_OUTPUTS = 10
+
+    LOSS = 'categorical_crossentropy'
+    OPTIMIZER = 'sgd'
+
+    def __init__(self, layer_sizes=(128, 10), activations=('relu', 'softmax')):
+        """
+        Inits SimpleModel attributes.
+
+        :param layer_sizes: a tuple of hidden layer & output layer sizes
+        :param activations: a tuple of activation functions for each layer
+        """
+        self.layer_sizes = layer_sizes
+        self.activations = activations
+
+        self.model = self._build()
+        self.model.summary()
+
+    def _build(self):
+        """Builds this model."""
+        model = Sequential()
+
+        model.add(Dense(self.layer_sizes[0], input_shape=self.INPUT_SHAPE))
+        model.add(Activation(self.activations[0]))
+
+        for i, size in enumerate(self.layer_sizes[1:]):
+            model.add(Dense(size))
+            model.add(Activation(self.activations[i + 1]))
+
+        return model
 
 
 def build_model(input_shape, layer_sizes, activation_functions):
