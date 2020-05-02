@@ -17,6 +17,55 @@ BATCH_SIZE = 128
 EPOCHS = 10
 
 
+class ConvolutionalModel:
+    """A convolutional model."""
+    INPUT_SHAPE = (28, 28, 1)
+    NUM_OUTPUTS = 10
+
+    LOSS = 'categorical_crossentropy'
+    OPTIMIZER = 'adam'
+
+    def __init__(self, layer_sizes=(32, 32, 64, 64, 128, 10),
+                 activations=('relu', 'relu', 'relu', 'relu', 'relu', 'softmax')):
+        """
+        Inits SimpleModel attributes.
+
+        :param layer_sizes: a tuple of hidden and output layer sizes
+        :param activations: a tuple of activation functions for each layer
+        """
+        self.layer_sizes = layer_sizes
+        self.activations = activations
+
+        self.model = self._build()
+        self.model.summary()
+
+    def _build(self):
+        """Builds this model."""
+        model = Sequential()
+
+        model.add(Conv2D(self.layer_sizes[0], 3, input_shape=self.INPUT_SHAPE))
+        model.add(Activation(self.activations[0]))
+        model.add(Conv2D(self.layer_sizes[1], 3))
+        model.add(Activation(self.activations[1]))
+        model.add(MaxPooling2D())
+
+        model.add(Conv2D(self.layer_sizes[2], 3))
+        model.add(Activation(self.activations[2]))
+        model.add(Conv2D(self.layer_sizes[3], 3))
+        model.add(Activation(self.activations[3]))
+        model.add(MaxPooling2D())
+
+        model.add(Flatten())
+
+        model.add(Dense(self.layer_sizes[4]))
+        model.add(Activation(self.activations[4]))
+        model.add(Dropout(0.4))
+        model.add(Dense(self.layer_sizes[5]))
+        model.add(Activation(self.activations[5]))
+
+        return model
+
+
 def build_model(input_shape, layer_sizes, activation_functions):
     """
     Builds a convolutional model.
