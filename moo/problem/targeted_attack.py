@@ -5,21 +5,15 @@ from problem.problem import Problem
 
 class TargetedAttack(Problem):
     """A MOO problem for targeted attacks on image recognition models."""
+    NUM_VARIABLES = 28 * 28
+    NUM_OBJECTIVES = 2
 
-    def __init__(self, model):
+    def __init__(self, model, noise_size):
         """Initializes TargetedAttack attributes."""
-        super().__init__()
+        super().__init__(self.NUM_VARIABLES, self.NUM_OBJECTIVES,
+                         -noise_size, noise_size)
 
         self.model = model
-
-        self.num_variables = 28 * 28
-        self.num_objectives = 2
-
-        self.mins = 0
-        self.maxs = 1
-
-        self.o_mins = [None, None]
-        self.o_maxs = [None, None]
 
     def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
