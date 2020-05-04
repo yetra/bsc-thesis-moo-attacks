@@ -1,5 +1,6 @@
 import math
 
+from algorithms import operators
 from moo.solution.nsga2_solution import NSGA2Solution
 
 
@@ -15,17 +16,11 @@ class NSGA2:
         selection: the selection operator to use
     """
 
-    def __init__(self, problem, population_size, max_iterations, crossover,
-                 mutation, selection):
+    def __init__(self, problem, population_size, max_iterations):
         """Initializes NSGA2 attributes."""
         self.problem = problem
-
         self.population_size = population_size
         self.max_iterations = max_iterations
-
-        self.crossover = crossover
-        self.mutation = mutation
-        self.selection = selection
 
     def run(self, orig_image, label):
         """Executes the algorithm."""
@@ -37,8 +32,8 @@ class NSGA2:
         while iteration < self.max_iterations:
             print(f'i={iteration}')
             
-            offspring = self.generate_offspring(population)
-            self.problem.evaluate(population, orig_image, label)
+            offspring = operators.reproduce(population)
+            self.problem.evaluate(offspring, orig_image, label)
             fronts = self.fast_non_dominated_sort(population + offspring)
 
             next_population = []
@@ -69,26 +64,6 @@ class NSGA2:
             population.append(solution)
 
         return population
-
-    def generate_offspring(self, parents):
-        """
-        Generates population_size offspring from the given parent population.
-
-        :param parents: the parent population
-        :return: a list of offspring
-        """
-        offspring = []
-
-        while len(offspring) < self.population_size:
-            first_parent = self.selection.select_from(parents)
-            second_parent = self.selection.select_from(parents)
-            children = self.crossover.of(first_parent, second_parent)
-
-            for child in children:
-                self.mutation.mutate(child)
-                offspring.append(child)
-
-        return offspring
 
     def fast_non_dominated_sort(self, population):
         """

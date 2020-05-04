@@ -1,5 +1,6 @@
 import numpy as np
 
+from algorithms import operators
 from solution.spea2_solution import SPEA2Solution
 
 
@@ -14,23 +15,15 @@ class SPEA2:
         population_size: the size of the population
         archive_size: the size of the archive
         max_iterations: the maximum number of algorithm iterations
-        crossover: the crossover operator to use
-        mutation: the mutation operator to use
-        selection: the selection operator to use
     """
 
-    def __init__(self, problem, population_size, archive_size, max_iterations,
-                 crossover, mutation, selection):
+    def __init__(self, problem, population_size, archive_size, max_iterations):
         """Initializes SPEA2 attributes."""
         self.problem = problem
 
         self.population_size = population_size
         self.archive_size = archive_size
         self.max_iterations = max_iterations
-
-        self.crossover = crossover
-        self.mutation = mutation
-        self.selection = selection
 
     def run(self, orig_image, label):
         """Executes the algorithm."""
@@ -46,7 +39,7 @@ class SPEA2:
             self.fitness_assignment(union)
 
             archive = self.environmental_selection(union)
-            population = self.generate_next_population(archive)
+            population = operators.reproduce(archive)
             self.problem.evaluate(population, orig_image, label)
             
             iteration += 1
@@ -62,21 +55,6 @@ class SPEA2:
             population.append(solution)
 
         return population
-
-    def generate_next_population(self, parents):
-        """Generates population_size offspring from the given parents."""
-        offspring = []
-
-        while len(offspring) < self.population_size:
-            first_parent = self.selection.select_from(parents)
-            second_parent = self.selection.select_from(parents)
-            children = self.crossover.of(first_parent, second_parent)
-
-            for child in children:
-                self.mutation.mutate(child)
-                offspring.append(child)
-
-        return offspring
 
     def fitness_assignment(self, union):
         """Assigns fitness values to all solutions in the given union."""
