@@ -26,5 +26,5 @@ class Problem(ABC):
         self.objective_maxs = []
 
     @abstractmethod
-    def evaluate(self, solution, orig_image, label):
-        """Evaluates the given solution."""
+    def evaluate(self, population, orig_image, label):
+        """Evaluates solutions in the given population."""
