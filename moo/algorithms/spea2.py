@@ -12,49 +12,43 @@ class SPEA2:
 
     Attributes:
         problem: the multi-objective optimization problem to solve
-        population_size: the size of the population
+        pop_size: the size of the population
         archive_size: the size of the archive
         max_iterations: the maximum number of algorithm iterations
     """
 
-    def __init__(self, problem, population_size, archive_size, max_iterations):
+    def __init__(self, problem, pop_size, archive_size, max_iterations):
         """Initializes SPEA2 attributes."""
         self.problem = problem
 
-        self.population_size = population_size
+        self.pop_size = pop_size
         self.archive_size = archive_size
         self.max_iterations = max_iterations
 
     def run(self, orig_image, label):
         """Executes the algorithm."""
-        population = self.generate_initial_population()
-        self.problem.evaluate(population, orig_image, label)
+        population = self.initialize()
         archive = []
 
         iteration = 0
         while iteration < self.max_iterations:
             print(f'i={iteration}')
 
+            self.problem.evaluate(population, orig_image, label)
+
             union = population + archive
             self.fitness_assignment(union)
 
             archive = self.environmental_selection(union)
             population = operators.reproduce(archive)
-            self.problem.evaluate(population, orig_image, label)
-            
+
             iteration += 1
 
         return archive
 
-    def generate_initial_population(self):
+    def initialize(self):
         """Returns the initial population."""
-        population = []
-
-        for _ in range(self.population_size):
-            solution = SPEA2Solution(self.problem)
-            population.append(solution)
-
-        return population
+        return [SPEA2Solution(self.problem) for _ in range(self.pop_size)]
 
     def fitness_assignment(self, union):
         """Assigns fitness values to all solutions in the given union."""
