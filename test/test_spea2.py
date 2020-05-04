@@ -1,7 +1,4 @@
-from algorithms.spea2 import SPEA2
-from moo.crossover.arithmetic_crossover import ArithmeticCrossover
-from moo.mutation.gaussian_mutation import GaussianMutation
-from moo.selection.tournament_selection import TournamentSelection
+from spea2 import SPEA2
 # from test_problem1 import TestProblem1
 from test_problem2 import TestProblem2
 
@@ -9,16 +6,11 @@ if __name__ == '__main__':
     # problem = TestProblem1()
     problem = TestProblem2()
 
-    population_size = 100
+    pop_size = 100
     archive_size = 100
-    max_iterations = 50
+    max_iter = 50
 
-    crossover = ArithmeticCrossover(0.7, problem)
-    mutation = GaussianMutation(0.0, 1.0, 0.03, problem)
-    selection = TournamentSelection(2)
-
-    archive = SPEA2(problem, population_size, archive_size, max_iterations,
-                    crossover, mutation, selection).run()
+    archive = SPEA2(problem, pop_size, archive_size, max_iter).run(None, None)
 
     print(f'\nPrinting objectives for archive with {len(archive)} elements')
 

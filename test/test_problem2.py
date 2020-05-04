@@ -1,6 +1,6 @@
 import numpy as np
 
-from moo.problem import Problem
+from problem.problem import Problem
 
 
 class TestProblem2(Problem):
@@ -23,14 +23,16 @@ class TestProblem2(Problem):
         self.objective_mins = [None] * self.objectives_count
         self.objective_maxs = [None] * self.objectives_count
 
-    def evaluate(self, solution):
+    def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
-        solution.objectives = np.array([solution.variables[0],
-                                        (1.0 + solution.variables[1])
-                                        / solution.variables[0]])
+        for solution in population:
+            solution.objectives = np.array(
+                [solution.variables[0],
+                 (1.0 + solution.variables[1]) / solution.variables[0]]
+            )
 
-        for i, o in enumerate(solution.objectives):
-            if self.objective_mins[i] is None or o < self.objective_mins[i]:
-                self.objective_mins[i] = o
-            elif self.objective_maxs[i] is None or o > self.objective_maxs[i]:
-                self.objective_maxs[i] = o
+            for i, o in enumerate(solution.objectives):
+                if self.objective_mins[i] is None or o < self.objective_mins[i]:
+                    self.objective_mins[i] = o
+                elif self.objective_maxs[i] is None or o > self.objective_maxs[i]:
+                    self.objective_maxs[i] = o
