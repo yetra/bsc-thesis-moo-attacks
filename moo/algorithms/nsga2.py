@@ -9,22 +9,19 @@ class NSGA2:
 
     Attributes:
         problem: the multi-objective optimization problem to solve
-        population_size: the size of the population
+        pop_size: the size of the population
         max_iterations: the maximum number of algorithm iterations
-        crossover: the crossover operator to use
-        mutation: the mutation operator to use
-        selection: the selection operator to use
     """
 
-    def __init__(self, problem, population_size, max_iterations):
+    def __init__(self, problem, pop_size, max_iterations):
         """Initializes NSGA2 attributes."""
         self.problem = problem
-        self.population_size = population_size
+        self.pop_size = pop_size
         self.max_iterations = max_iterations
 
     def run(self, orig_image, label):
         """Executes the algorithm."""
-        population = self.generate_initial_population()
+        population = self.initialize()
         self.problem.evaluate(population, orig_image, label)
         self.fast_non_dominated_sort(population)
 
@@ -40,14 +37,14 @@ class NSGA2:
             front_index = 0
 
             while (len(next_population) + len(fronts[front_index])
-                   <= self.population_size):
+                   <= self.pop_size):
                 next_population += fronts[front_index]
                 front_index += 1
 
             too_large_front = fronts[front_index]
             too_large_front.sort(reverse=True)  # TODO partial order?
 
-            fill_count = self.population_size - len(too_large_front)
+            fill_count = self.pop_size - len(too_large_front)
             next_population += too_large_front[:fill_count]
 
             population = next_population
@@ -55,15 +52,9 @@ class NSGA2:
 
         return self.fast_non_dominated_sort(population)  # TODO ?
 
-    def generate_initial_population(self):
+    def initialize(self):
         """Returns the initial population."""
-        population = []
-
-        for _ in range(self.population_size):
-            solution = NSGA2Solution(self.problem)
-            population.append(solution)
-
-        return population
+        return [NSGA2Solution(self.problem) for _ in range(self.pop_size)]
 
     def fast_non_dominated_sort(self, population):
         """
