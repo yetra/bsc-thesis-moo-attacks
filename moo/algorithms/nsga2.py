@@ -27,9 +27,10 @@ class NSGA2:
         self.mutation = mutation
         self.selection = selection
 
-    def run(self):
+    def run(self, orig_image, label):
         """Executes the algorithm."""
         population = self.generate_initial_population()
+        self.problem.evaluate(population, orig_image, label)
         self.fast_non_dominated_sort(population)
 
         iteration = 0
@@ -37,6 +38,7 @@ class NSGA2:
             print(f'i={iteration}')
             
             offspring = self.generate_offspring(population)
+            self.problem.evaluate(population, orig_image, label)
             fronts = self.fast_non_dominated_sort(population + offspring)
 
             next_population = []
@@ -64,7 +66,6 @@ class NSGA2:
 
         for _ in range(self.population_size):
             solution = NSGA2Solution(self.problem)
-            self.problem.evaluate(solution)
             population.append(solution)
 
         return population
@@ -85,7 +86,6 @@ class NSGA2:
 
             for child in children:
                 self.mutation.mutate(child)
-                self.problem.evaluate(child)
                 offspring.append(child)
 
         return offspring

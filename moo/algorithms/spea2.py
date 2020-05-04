@@ -32,9 +32,10 @@ class SPEA2:
         self.mutation = mutation
         self.selection = selection
 
-    def run(self):
+    def run(self, orig_image, label):
         """Executes the algorithm."""
         population = self.generate_initial_population()
+        self.problem.evaluate(population, orig_image, label)
         archive = []
 
         iteration = 0
@@ -46,6 +47,7 @@ class SPEA2:
 
             archive = self.environmental_selection(union)
             population = self.generate_next_population(archive)
+            self.problem.evaluate(population, orig_image, label)
             
             iteration += 1
 
@@ -57,7 +59,6 @@ class SPEA2:
 
         for _ in range(self.population_size):
             solution = SPEA2Solution(self.problem)
-            self.problem.evaluate(solution)
             population.append(solution)
 
         return population
@@ -73,7 +74,6 @@ class SPEA2:
 
             for child in children:
                 self.mutation.mutate(child)
-                self.problem.evaluate(child)
                 offspring.append(child)
 
         return offspring
