@@ -31,9 +31,11 @@ def select(population, tournament_size=2):
     return best
 
 
-def mutate(solution, min=0.0, max=1.0, p=0.03):
+def mutate(solution, p=0.03):
     """Mutates the given solution."""
-    perturbation = np.random.uniform(min, max, solution.variables.shape)
+    mins, maxs = solution.problem.mins, solution.problem.maxs
+
+    perturbation = np.random.uniform(mins, maxs, solution.variables.shape)
     booleans = (np.random.uniform(size=solution.variables.shape)
                 < p).astype('float32')
 
