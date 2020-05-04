@@ -1,6 +1,6 @@
 import numpy as np
 
-from algorithms import operators
+import operators
 from solution.spea2_solution import SPEA2Solution
 
 
