@@ -40,6 +40,7 @@ def mutate(solution, p=0.03):
                 < p).astype('float32')
 
     solution.variables += perturbation * booleans
+    np.clip(solution.variables, mins, maxs, out=solution.variables)
 
 
 def cross(parent_1, parent_2, alpha=0.7):
