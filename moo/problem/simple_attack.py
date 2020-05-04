@@ -23,11 +23,5 @@ class SimpleAttack(Problem):
             predictions = self.model.predict(orig_image + solution.variables)
             noise_strength = np.linalg.norm(solution.variables, ord=1)
 
-            solution.objectives = np.array([predictions[label],
-                                            noise_strength])
-
-            for i, o in enumerate(solution.objectives):
-                if self.o_mins[i] is None or o < self.o_mins[i]:
-                    self.o_mins[i] = o
-                elif self.o_maxs[i] is None or o > self.o_maxs[i]:
-                    self.o_maxs[i] = o
+            solution.objectives = np.array([predictions[label], noise_strength])
+            self._update_o_extremes(solution)

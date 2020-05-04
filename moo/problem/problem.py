@@ -27,6 +27,14 @@ class Problem(ABC):
         self.o_maxs = ([float('-inf')] * num_objectives
                        if o_maxs is None else o_maxs)
 
+    def _update_o_extremes(self, solution):
+        """Updates the o_mins & o_maxs attributes."""
+        for i, o in enumerate(solution.objectives):
+            if o < self.o_mins[i]:
+                self.o_mins[i] = o
+            elif o > self.o_maxs[i]:
+                self.o_maxs[i] = o
+
     @abstractmethod
     def evaluate(self, population, orig_image, label):
         """Evaluates solutions in the given population."""
