@@ -3,6 +3,21 @@ import random
 import numpy as np
 
 
+def reproduce(parents):
+    """Reproduces the given parent population."""
+    offspring = []
+
+    while len(offspring) < len(parents):
+        first_parent, second_parent = select(parents), select(parents)
+        children = cross(first_parent, second_parent)
+
+        for child in children:
+            mutate(child)
+            offspring.append(child)
+
+    return offspring
+
+
 def select(population, tournament_size=2):
     """Returns a solution selected from the given population."""
     best = None
