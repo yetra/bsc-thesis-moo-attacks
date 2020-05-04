@@ -14,14 +14,14 @@ class TestProblem2(Problem):
         """Initializes TestProblem2 attributes."""
         super().__init__()
 
-        self.variables_count = 2
-        self.objectives_count = 2
+        self.num_variables = 2
+        self.num_objectives = 2
 
         self.mins = [0.1, 0.0]
         self.maxs = [1.0, 5.0]
 
-        self.objective_mins = [None] * self.objectives_count
-        self.objective_maxs = [None] * self.objectives_count
+        self.o_mins = [None] * self.num_objectives
+        self.o_maxs = [None] * self.num_objectives
 
     def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
@@ -32,7 +32,7 @@ class TestProblem2(Problem):
             )
 
             for i, o in enumerate(solution.objectives):
-                if self.objective_mins[i] is None or o < self.objective_mins[i]:
-                    self.objective_mins[i] = o
-                elif self.objective_maxs[i] is None or o > self.objective_maxs[i]:
-                    self.objective_maxs[i] = o
+                if self.o_mins[i] is None or o < self.o_mins[i]:
+                    self.o_mins[i] = o
+                elif self.o_maxs[i] is None or o > self.o_maxs[i]:
+                    self.o_maxs[i] = o

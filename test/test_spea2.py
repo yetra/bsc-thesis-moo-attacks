@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     print(f'\nPrinting objectives for archive with {len(archive)} elements')
 
-    for i in range(problem.objectives_count):
+    for i in range(problem.num_objectives):
         print(f'\nObjective {i}:')
 
         for solution in archive:

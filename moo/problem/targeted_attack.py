@@ -12,14 +12,14 @@ class TargetedAttack(Problem):
 
         self.model = model
 
-        self.variables_count = 28 * 28
-        self.objectives_count = 2
+        self.num_variables = 28 * 28
+        self.num_objectives = 2
 
         self.mins = 0
         self.maxs = 1
 
-        self.objective_mins = [None, None]
-        self.objective_maxs = [None, None]
+        self.o_mins = [None, None]
+        self.o_maxs = [None, None]
 
     def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
@@ -31,7 +31,7 @@ class TargetedAttack(Problem):
                                             noise_strength])
 
             for i, o in enumerate(solution.objectives):
-                if self.objective_mins[i] is None or o < self.objective_mins[i]:
-                    self.objective_mins[i] = o
-                elif self.objective_maxs[i] is None or o > self.objective_maxs[i]:
-                    self.objective_maxs[i] = o
+                if self.o_mins[i] is None or o < self.o_mins[i]:
+                    self.o_mins[i] = o
+                elif self.o_maxs[i] is None or o > self.o_maxs[i]:
+                    self.o_maxs[i] = o

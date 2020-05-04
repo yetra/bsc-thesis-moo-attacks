@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     print(f'\nPrinting objectives for front 0 with {len(fronts[0])} elements')
 
-    for i in range(problem.objectives_count):
+    for i in range(problem.num_objectives):
         print(f'\nObjective {i}:')
 
         for solution in fronts[0]:

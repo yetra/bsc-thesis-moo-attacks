@@ -23,11 +23,11 @@ class Solution:
 
         if variables is None:
             self.variables = np.random.uniform(
-                problem.mins, problem.maxs, problem.variables_count)
+                problem.mins, problem.maxs, problem.num_variables)
         else:
             self.variables = variables
 
-        self.objectives = np.zeros(problem.objectives_count)
+        self.objectives = np.zeros(problem.num_objectives)
 
     def dominates(self, other):
         """Returns True if this solution dominates the given solution."""

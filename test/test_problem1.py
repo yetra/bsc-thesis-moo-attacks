@@ -16,14 +16,14 @@ class TestProblem1(Problem):
         """Initializes TestProblem1 attributes."""
         super().__init__()
 
-        self.variables_count = 4
-        self.objectives_count = 4
+        self.num_variables = 4
+        self.num_objectives = 4
 
-        self.mins = [-5.0] * self.variables_count
-        self.maxs = [5.0] * self.variables_count
+        self.mins = [-5.0] * self.num_variables
+        self.maxs = [5.0] * self.num_variables
 
-        self.objective_mins = [None] * self.objectives_count
-        self.objective_maxs = [None] * self.objectives_count
+        self.o_mins = [None] * self.num_objectives
+        self.o_maxs = [None] * self.num_objectives
 
     def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
@@ -34,12 +34,12 @@ class TestProblem1(Problem):
                 objective = v * v
                 objectives.append(objective)
 
-                if (self.objective_mins[i] is None
-                        or objective < self.objective_mins[i]):
-                    self.objective_mins[i] = objective
+                if (self.o_mins[i] is None
+                        or objective < self.o_mins[i]):
+                    self.o_mins[i] = objective
 
-                elif (self.objective_maxs[i] is None
-                      or objective > self.objective_maxs[i]):
-                    self.objective_maxs[i] = objective
+                elif (self.o_maxs[i] is None
+                      or objective > self.o_maxs[i]):
+                    self.o_maxs[i] = objective
 
             solution.objectives = np.array(objectives)

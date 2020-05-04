@@ -116,14 +116,13 @@ class NSGA2:
         front[0].crowding_distance = math.inf
         front[-1].crowding_distance = math.inf
 
-        for i in range(self.problem.objectives_count):
+        for i in range(self.problem.num_objectives):
             front.sort(key=lambda ind: ind.objectives[i])
 
             for j in range(1, len(front) - 1):
                 neighbors_diff = (front[j + 1].objectives[i]
                                   - front[j - 1].objectives[i])
 
-                max_diff = (self.problem.objective_maxs[i]
-                            - self.problem.objective_mins[i])
+                max_diff = self.problem.o_maxs[i] - self.problem.o_mins[i]
 
                 front[j].crowding_distance += neighbors_diff / max_diff
