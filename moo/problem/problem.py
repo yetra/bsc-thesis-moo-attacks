@@ -5,8 +5,7 @@ class Problem(ABC):
     """Models a multi-objective optimization problem.
 
     Attributes:
-        num_variables: the number of decision space variables that this
-                         problem requires
+        num_variables: the number of decision space variables
         num_objectives: the number of objectives to optimize
         mins: the lowest possible values of each decision space variable
         maxs: the highest possible values of each decision space variable
@@ -14,16 +13,19 @@ class Problem(ABC):
         o_mins: the highest possible values of each objective
     """
 
-    def __init__(self):
+    def __init__(self, num_variables, num_objectives, mins, maxs,
+                 o_mins=None, o_maxs=None):
         """Initializes Problem attributes."""
-        self.num_variables = -1
-        self.num_objectives = -1
+        self.num_variables = num_variables
+        self.num_objectives = num_objectives
 
-        self.mins = []
-        self.maxs = []
+        self.mins = mins
+        self.maxs = maxs
 
-        self.o_mins = []
-        self.o_mins = []
+        self.o_mins = ([float('inf')] * num_objectives
+                       if o_mins is None else o_mins)
+        self.o_maxs = ([float('-inf')] * num_objectives
+                       if o_maxs is None else o_maxs)
 
     @abstractmethod
     def evaluate(self, population, orig_image, label):
