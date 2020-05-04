@@ -22,32 +22,20 @@ class NSGA2:
     def run(self, orig_image, label):
         """Executes the algorithm."""
         population = self.initialize()
+
         self.problem.evaluate(population, orig_image, label)
         self.fast_non_dominated_sort(population)
 
         iteration = 0
         while iteration < self.max_iterations:
             print(f'i={iteration}')
-            
+
             offspring = operators.reproduce(population)
             self.problem.evaluate(offspring, orig_image, label)
+
             fronts = self.fast_non_dominated_sort(population + offspring)
+            population = self.build_population(fronts)
 
-            next_population = []
-            front_index = 0
-
-            while (len(next_population) + len(fronts[front_index])
-                   <= self.pop_size):
-                next_population += fronts[front_index]
-                front_index += 1
-
-            too_large_front = fronts[front_index]
-            too_large_front.sort(reverse=True)  # TODO partial order?
-
-            fill_count = self.pop_size - len(too_large_front)
-            next_population += too_large_front[:fill_count]
-
-            population = next_population
             iteration += 1
 
         return self.fast_non_dominated_sort(population)  # TODO ?
@@ -55,6 +43,21 @@ class NSGA2:
     def initialize(self):
         """Returns the initial population."""
         return [NSGA2Solution(self.problem) for _ in range(self.pop_size)]
+
+    def build_population(self, fronts):
+        """Builds a population from the given fronts."""
+        population = []
+
+        for front in fronts:
+            if len(population) + len(front) > self.pop_size:
+                front.sort(reverse=True)
+                fill_count = self.pop_size - len(front)
+                population += front[:fill_count]
+                break
+
+            population += front
+
+        return population
 
     def fast_non_dominated_sort(self, population):
         """
