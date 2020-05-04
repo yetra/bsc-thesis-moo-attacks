@@ -58,8 +58,8 @@ class AttackModel(ABC):
     def save(self, weights_path=None):
         """Saves this model's weights to the specified path."""
         if weights_path is None:
-            weights_path = (f'data/{type(self).__name__}'
-                            f'_{time.strftime("%Y%m%d_%H%M%S")}.h5')
+            weights_path = (f'trained/{type(self).__name__}'
+                            f'{time.strftime("%Y-%m-%d-%H-%M-%S")}.h5')
 
         self.model.save_weights(weights_path)
 
