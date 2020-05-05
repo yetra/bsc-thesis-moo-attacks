@@ -51,3 +51,14 @@ def init_attack(args):
         algorithm = SPEA2(problem, args.popsize, args.popsize, args.maxiter)
 
     return model, problem, algorithm
+
+
+def plot_objectives(front):
+    """Plots 2D objectives of solutions in the given front."""
+    label_probability = [solution.objectives[0] for solution in front]
+    noise_strength = [solution.objectives[1] for solution in front]
+
+    plt.scatter(noise_strength, label_probability)
+    plt.xlabel('noise strength')
+    plt.ylabel('label probability')
+    plt.show()
