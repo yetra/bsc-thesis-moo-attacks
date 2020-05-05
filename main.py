@@ -30,3 +30,24 @@ def parse_args():
                         help='the size of the population')
 
     return parser.parse_args()
+
+
+def init_attack(args):
+    """Initializes objects based on the given command-line arguments."""
+    if args.model == 'simple_model':
+        model = SimpleModel()
+    else:
+        model = ConvolutionalModel()
+    model.load(args.weights)
+
+    if args.attack_type == 'simple_attack':
+        problem = SimpleAttack(model, args.noise_size)
+    else:
+        problem = TargetedAttack(model, args.noise_size)
+
+    if args.algorithm == 'nsga2':
+        algorithm = NSGA2(problem, args.popsize, args.maxiter)
+    else:
+        algorithm = SPEA2(problem, args.popsize, args.popsize, args.maxiter)
+
+    return model, problem, algorithm
