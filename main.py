@@ -1,6 +1,9 @@
 import argparse
+
+import numpy as np
 from matplotlib import pyplot as plt
 
+import util
 from convolutional_model import ConvolutionalModel
 from nsga2 import NSGA2
 from problem.simple_attack import SimpleAttack
@@ -62,3 +65,26 @@ def plot_objectives(front):
     plt.xlabel('noise strength')
     plt.ylabel('label probability')
     plt.show()
+
+
+if __name__ == '__main__':
+    model, problem, algorithm = init_attack(parse_args())
+
+    x_train, y_train, _, _ = util.load_mnist(
+        model.INPUT_SHAPE, model.NUM_OUTPUTS)
+
+    for orig_image, orig_probs in zip(x_train, y_train):
+        orig_label = np.argmax(orig_probs)
+        predicted_probs = model.predict(orig_image)
+
+        if orig_label != np.argmax(predicted_probs):
+            continue
+
+        fronts = algorithm.run(orig_image, orig_label)
+
+        print(f'orig label: {orig_label}')
+        plot_objectives(fronts[0])
+
+        for solution in fronts[0]:
+            adv_probs = model.predict(orig_image + solution.variables)
+            print(f'{solution.objectives} adv label: {np.argmax(adv_probs)}\n')
