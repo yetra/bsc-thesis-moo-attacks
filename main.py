@@ -79,14 +79,16 @@ if __name__ == '__main__':
         if label != np.argmax(predicted_probs):
             continue
 
+        print(f'orig_label: {label}')
         if isinstance(problem, TargetedAttack):
             label = (label + 1) % 10
+            print(f'target_label: {label}')
 
         fronts = algorithm.run(orig_image, label)
-
-        print(f'orig label: {label}')
         plot_objectives(fronts[0])
 
         for solution in fronts[0]:
             adv_probs = model.predict(orig_image + solution.variables)
-            print(f'{solution.objectives} adv label: {np.argmax(adv_probs)}\n')
+            print(f'adv_label: {np.argmax(adv_probs)} {solution.objectives}')
+
+        print()
