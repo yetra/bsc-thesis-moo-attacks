@@ -74,15 +74,17 @@ if __name__ == '__main__':
         model.INPUT_SHAPE, model.NUM_OUTPUTS)
 
     for orig_image, orig_probs in zip(x_train, y_train):
-        orig_label = np.argmax(orig_probs)
+        label = np.argmax(orig_probs)
         predicted_probs = model.predict(orig_image)
-
-        if orig_label != np.argmax(predicted_probs):
+        if label != np.argmax(predicted_probs):
             continue
 
-        fronts = algorithm.run(orig_image, orig_label)
+        if isinstance(problem, TargetedAttack):
+            label = (label + 1) % 10
 
-        print(f'orig label: {orig_label}')
+        fronts = algorithm.run(orig_image, label)
+
+        print(f'orig label: {label}')
         plot_objectives(fronts[0])
 
         for solution in fronts[0]:
