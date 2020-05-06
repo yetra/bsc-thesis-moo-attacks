@@ -20,7 +20,7 @@ class SimpleAttack(Problem):
         """Evaluates solutions in the given population."""
         for solution in population:
             predictions = self.model.predict(orig_image + solution.variables)
-            noise_strength = np.linalg.norm(solution.variables, ord=1)
+            noise_strength = np.sum(np.abs(solution.variables))
 
             solution.objectives = np.array([predictions[label], noise_strength])
             self._update_o_extremes(solution)
