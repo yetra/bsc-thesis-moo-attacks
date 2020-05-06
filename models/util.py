@@ -3,12 +3,12 @@ from keras.datasets import mnist
 from matplotlib import pyplot as plt
 
 
-def load_mnist(input_shape, num_of_outputs):
+def load_mnist(input_shape, num_outputs=10):
     """
     Loads the MNIST dataset.
 
     :param input_shape: a tuple describing the shape of the model's input layer
-    :param num_of_outputs: the number of model outputs
+    :param num_outputs: the number of model outputs
     :return: the MNIST training & test sets with corresponding labels
     """
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -19,8 +19,8 @@ def load_mnist(input_shape, num_of_outputs):
     x_train /= 255
     x_test /= 255
 
-    y_train = keras.utils.to_categorical(y_train, num_of_outputs)
-    y_test = keras.utils.to_categorical(y_test, num_of_outputs)
+    y_train = keras.utils.to_categorical(y_train, num_outputs)
+    y_test = keras.utils.to_categorical(y_test, num_outputs)
 
     return x_train, y_train, x_test, y_test
 
