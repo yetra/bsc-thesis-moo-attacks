@@ -14,16 +14,16 @@ class SPEA2Solution(Solution):
             fitness: a sum of the density and raw fitness of this solution
         """
 
-    def __init__(self, problem=None):
-        """Initializes Solution attributes.
+    def __init__(self, problem, variables=None):
+        """Initializes SPEA2Solution attributes.
 
-        If the problem argument is not None, the decision vector's values will
-        be randomized.
+        If the given decision variables vector is None, the variables vector
+        will be initialized with random values.
 
-        Args:
-            problem: an object representing the MOOP to optimize
+        :param problem: an instance of Problem - the MOOP to optimize
+        :param variables: the decision variables vector
         """
-        super().__init__(problem)
+        super().__init__(problem, variables)
 
         self.dominators = []
         self.strength = 0
@@ -35,13 +35,3 @@ class SPEA2Solution(Solution):
     def __gt__(self, other):
         """Applies the fitness comparison operator (for minimization)."""
         return self.fitness < other.fitness
-
-    def euclidean_distance(self, other):
-        """Returns the objective-space Euclidean distance to the given other
-        solution."""
-        distance = 0.0
-
-        for o1, o2 in zip(self.objectives, other.objectives):
-            distance += (o2 - o1) ** 2
-
-        return math.sqrt(distance)

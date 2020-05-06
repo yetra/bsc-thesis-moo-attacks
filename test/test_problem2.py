@@ -1,4 +1,6 @@
-from moo.problem import Problem
+import numpy as np
+
+from problem.problem import Problem
 
 
 class TestProblem2(Problem):
@@ -7,28 +9,19 @@ class TestProblem2(Problem):
     f1(x1, x2) = x1,
     f2(x1, x2) = (1 + x2) / x1
     """
+    NUM_VARIABLES = 2
+    NUM_OBJECTIVES = 2
+    MINS = [0.1, 0.0]
+    MAXS = [1.0, 5.0]
 
     def __init__(self):
         """Initializes TestProblem2 attributes."""
-        super().__init__()
+        super().__init__(self.NUM_VARIABLES, self.NUM_OBJECTIVES,
+                         self.MINS, self.MAXS)
 
-        self.variables_count = 2
-        self.objectives_count = 2
-
-        self.mins = [0.1, 0.0]
-        self.maxs = [1.0, 5.0]
-
-        self.objective_mins = [None] * self.objectives_count
-        self.objective_maxs = [None] * self.objectives_count
-
-    def evaluate(self, solution):
+    def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
-        solution.objectives = [solution.variables[0],
-                               (1.0 + solution.variables[1])
-                               / solution.variables[0]]
-
-        for i, o in enumerate(solution.objectives):
-            if self.objective_mins[i] is None or o < self.objective_mins[i]:
-                self.objective_mins[i] = o
-            elif self.objective_maxs[i] is None or o > self.objective_maxs[i]:
-                self.objective_maxs[i] = o
+        for solution in population:
+            x1, x2 = solution.variables
+            solution.objectives = np.array([x1, (1.0 + x2) / x1])
+            self._update_o_extremes(solution)

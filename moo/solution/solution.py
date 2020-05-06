@@ -1,36 +1,33 @@
-import random
+import numpy as np
 
 
 class Solution:
     """Models a multi-objective optimization problem's solution.
 
     Attributes:
+        problem: an instance of Problem - the MOOP to optimize
         variables: the decision variables vector
         objectives: the objectives in a given decision variables vector
     """
 
-    def __init__(self, problem=None):
+    def __init__(self, problem, variables=None):
         """Initializes Solution attributes.
 
-        If the problem argument is not None, the decision vector's values will be randomized.
+        If the given decision variables vector is None, the variables vector
+        will be initialized with random values.
 
-        Args:
-            problem: an object representing the MOOP to optimize
+        :param problem: an instance of Problem - the MOOP to optimize
+        :param variables: the decision variables vector
         """
-        self.variables = []
-        self.objectives = []
+        self.problem = problem
 
-        if problem:
-            self.randomize(problem)
+        if variables is None:
+            self.variables = np.random.uniform(
+                problem.mins, problem.maxs, problem.num_variables)
+        else:
+            self.variables = variables
 
-    def randomize(self, problem):
-        """Randomizes the decision space variables of this solution.
-
-        Args:
-            problem: the MOOP object containing info on the decision space dimension and constraints
-        """
-        for min_v, max_v in zip(problem.mins, problem.maxs):
-            self.variables.append(random.uniform(min_v, max_v))
+        self.objectives = np.zeros(problem.num_objectives)
 
     def dominates(self, other):
         """Returns True if this solution dominates the given solution."""

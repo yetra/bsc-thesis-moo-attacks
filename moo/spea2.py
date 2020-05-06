@@ -1,5 +1,6 @@
-import math
+import numpy as np
 
+import operators
 from solution.spea2_solution import SPEA2Solution
 
 
@@ -11,84 +12,55 @@ class SPEA2:
 
     Attributes:
         problem: the multi-objective optimization problem to solve
-        population_size: the size of the population
+        pop_size: the size of the population
         archive_size: the size of the archive
         max_iterations: the maximum number of algorithm iterations
-        crossover: the crossover operator to use
-        mutation: the mutation operator to use
-        selection: the selection operator to use
     """
 
-    def __init__(self, problem, population_size, archive_size, max_iterations,
-                 crossover, mutation, selection):
+    def __init__(self, problem, pop_size, archive_size, max_iterations):
         """Initializes SPEA2 attributes."""
         self.problem = problem
 
-        self.population_size = population_size
+        self.pop_size = pop_size
         self.archive_size = archive_size
         self.max_iterations = max_iterations
 
-        self.crossover = crossover
-        self.mutation = mutation
-        self.selection = selection
-
-    def run(self):
+    def run(self, orig_image, label):
         """Executes the algorithm."""
-        population = self.generate_initial_population()
+        population = self.initialize()
         archive = []
 
         iteration = 0
         while iteration < self.max_iterations:
             print(f'i={iteration}')
 
+            self.problem.evaluate(population, orig_image, label)
+
             union = population + archive
             self.fitness_assignment(union)
 
             archive = self.environmental_selection(union)
-            population = self.generate_next_population(archive)
-            
+            population = operators.reproduce(archive)
+
             iteration += 1
 
         return archive
 
-    def generate_initial_population(self):
+    def initialize(self):
         """Returns the initial population."""
-        population = []
-
-        for _ in range(self.population_size):
-            solution = SPEA2Solution(self.problem)
-            self.problem.evaluate(solution)
-            population.append(solution)
-
-        return population
-
-    def generate_next_population(self, parents):
-        """Generates population_size offspring from the given parents."""
-        offspring = []
-
-        while len(offspring) < self.population_size:
-            first_parent = self.selection.select_from(parents)
-            second_parent = self.selection.select_from(parents)
-            children = self.crossover.of(first_parent, second_parent)
-
-            for child in children:
-                self.mutation.mutate(child)
-                self.problem.evaluate(child)
-                offspring.append(child)
-
-        return offspring
+        return [SPEA2Solution(self.problem) for _ in range(self.pop_size)]
 
     def fitness_assignment(self, union):
         """Assigns fitness values to all solutions in the given union."""
-        k = int(math.sqrt(len(union)))
+        k = int(np.sqrt(len(union)))
 
         for solution in union:
             solution.strength = 0
             distances = []
 
             for candidate in union:
-                distance = solution.euclidean_distance(candidate)
-                distances.append(distance)
+                distances.append(np.linalg.norm(
+                    solution.objectives - candidate.objectives))
 
                 if solution.dominates(candidate):
                     candidate.dominators.append(solution)
@@ -125,14 +97,14 @@ class SPEA2:
     def archive_truncation(self, archive):
         """Truncates the given archive to archive_size."""
         while len(archive) > self.archive_size:
-            k = int(math.sqrt(len(archive)))
+            k = int(np.sqrt(len(archive)))
 
             for solution in archive:
                 distances = []
 
                 for other in archive:
-                    distance = solution.euclidean_distance(other)
-                    distances.append(distance)
+                    distances.append(np.linalg.norm(
+                        solution.objectives - other.objectives))
 
                 distances.sort()
                 solution.density = distances[k]  # TODO add separate attribute

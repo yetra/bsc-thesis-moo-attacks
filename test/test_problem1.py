@@ -1,4 +1,6 @@
-from moo.problem import Problem
+import numpy as np
+
+from problem.problem import Problem
 
 
 class TestProblem1(Problem):
@@ -9,29 +11,18 @@ class TestProblem1(Problem):
     f3(x1, x2, x3, x4) = x3^2,
     f4(x1, x2, x3, x4) = x4^2
     """
+    NUM_VARIABLES = 4
+    NUM_OBJECTIVES = 4
+    MINS = [-5.0, -5.0, -5.0, -5.0]
+    MAXS = [5.0, 5.0, 5.0, 5.0]
 
     def __init__(self):
         """Initializes TestProblem1 attributes."""
-        super().__init__()
+        super().__init__(self.NUM_VARIABLES, self.NUM_OBJECTIVES,
+                         self.MINS, self.MAXS)
 
-        self.variables_count = 4
-        self.objectives_count = 4
-
-        self.mins = [-5.0] * self.variables_count
-        self.maxs = [5.0] * self.variables_count
-
-        self.objective_mins = [None] * self.objectives_count
-        self.objective_maxs = [None] * self.objectives_count
-
-    def evaluate(self, solution):
+    def evaluate(self, population, orig_image, label):
         """Evaluates the given solution."""
-        solution.objectives = []
-
-        for i, v in enumerate(solution.variables):
-            objective = v * v
-            solution.objectives.append(objective)
-
-            if self.objective_mins[i] is None or objective < self.objective_mins[i]:
-                self.objective_mins[i] = objective
-            elif self.objective_maxs[i] is None or objective > self.objective_maxs[i]:
-                self.objective_maxs[i] = objective
+        for solution in population:
+            solution.objectives = np.array([v * v for v in solution.variables])
+            self._update_o_extremes(solution)
