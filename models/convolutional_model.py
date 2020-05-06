@@ -56,5 +56,5 @@ if __name__ == '__main__':
                            ConvolutionalModel.NUM_OUTPUTS)
 
     conv_model = ConvolutionalModel()
-    conv_model.train(data, epochs=10, batch_size=128)
+    conv_model.train(data, epochs=6, batch_size=128)
     conv_model.save()
