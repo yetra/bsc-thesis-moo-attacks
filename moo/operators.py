@@ -31,11 +31,11 @@ def select(population, tournament_size=2):
     return best
 
 
-def mutate(solution, p=0.03):
+def mutate(solution, mu=0.0, sigma=0.3, p=0.03):  # TODO sigma related to noise_size
     """Mutates the given solution."""
     mins, maxs = solution.problem.mins, solution.problem.maxs
 
-    perturbation = np.random.uniform(mins, maxs, solution.variables.shape)
+    perturbation = np.random.normal(mu, sigma, solution.variables.shape)
     booleans = (np.random.uniform(size=solution.variables.shape)
                 < p).astype('float32')
 
