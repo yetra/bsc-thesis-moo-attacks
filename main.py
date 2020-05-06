@@ -79,7 +79,7 @@ if __name__ == '__main__':
         if label != np.argmax(predicted_probs):
             continue
 
-        print(f'orig_label: {label}')
+        print(f'orig_label: {label} orig_prob: {np.max(predicted_probs):.4f}')
         if isinstance(problem, TargetedAttack):
             label = (label + 1) % 10
             print(f'target_label: {label}')
