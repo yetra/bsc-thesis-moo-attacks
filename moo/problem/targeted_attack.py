@@ -5,12 +5,11 @@ from problem.problem import Problem
 
 class TargetedAttack(Problem):
     """A MOO problem for targeted attacks on image recognition models."""
-    NUM_VARIABLES = 28 * 28
     NUM_OBJECTIVES = 2
 
     def __init__(self, model, noise_size):
         """Initializes TargetedAttack attributes."""
-        super().__init__(self.NUM_VARIABLES, self.NUM_OBJECTIVES,
+        super().__init__(model.INPUT_SHAPE, self.NUM_OBJECTIVES,
                          -noise_size, noise_size)
 
         self.model = model
