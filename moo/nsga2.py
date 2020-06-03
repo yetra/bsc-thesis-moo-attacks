@@ -1,6 +1,6 @@
 import math
 
-import operators
+from moo import operators
 from moo.solution.nsga2_solution import NSGA2Solution
 
 

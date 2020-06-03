@@ -3,13 +3,14 @@ import argparse
 import numpy as np
 from matplotlib import pyplot as plt
 
-import util
-from convolutional_model import ConvolutionalModel
-from nsga2 import NSGA2
-from problem.simple_attack import SimpleAttack
-from problem.targeted_attack import TargetedAttack
-from simple_model import SimpleModel
-from spea2 import SPEA2
+
+from models.convolutional_model import ConvolutionalModel
+from moo.nsga2 import NSGA2
+from moo.problem.simple_attack import SimpleAttack
+from moo.problem.targeted_attack import TargetedAttack
+from models.simple_model import SimpleModel
+from moo.spea2 import SPEA2
+from util import load_mnist
 
 
 def parse_args():
@@ -70,8 +71,7 @@ def plot_objectives(front):
 if __name__ == '__main__':
     model, problem, algorithm = init_attack(parse_args())
 
-    x_train, y_train, _, _ = util.load_mnist(
-        model.INPUT_SHAPE, model.NUM_OUTPUTS)
+    x_train, y_train, _, _ = load_mnist(model.INPUT_SHAPE, model.NUM_OUTPUTS)
 
     for orig_image, orig_probs in zip(x_train, y_train):
         label = np.argmax(orig_probs)

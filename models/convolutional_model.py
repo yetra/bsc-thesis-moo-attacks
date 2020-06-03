@@ -3,7 +3,7 @@ from keras.layers import Dense, Activation, Conv2D, Flatten, Dropout, \
 from keras.models import Sequential
 
 import util
-from attack_model import AttackModel
+from models.attack_model import AttackModel
 
 
 class ConvolutionalModel(AttackModel):

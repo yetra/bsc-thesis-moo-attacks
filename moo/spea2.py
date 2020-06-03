@@ -1,7 +1,7 @@
 import numpy as np
 
-import operators
-from solution.spea2_solution import SPEA2Solution
+from moo import operators
+from moo.solution.spea2_solution import SPEA2Solution
 
 
 class SPEA2:

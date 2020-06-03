@@ -1,6 +1,6 @@
 import numpy as np
 
-from problem.problem import Problem
+from moo.problem.problem import Problem
 
 
 class TargetedAttack(Problem):
