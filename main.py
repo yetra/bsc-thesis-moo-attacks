@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 
 from models.convolutional_model import ConvolutionalModel
 from moo.nsga2 import NSGA2
+from moo.problem.improved_targeted_attack import ImprovedTargetedAttack
 from moo.problem.simple_attack import SimpleAttack
 from moo.problem.targeted_attack import TargetedAttack
 from models.simple_model import SimpleModel
@@ -21,7 +22,8 @@ def parse_args():
                         help='the MOO algorithm to run')
 
     parser.add_argument('attack_type', help='the type of attack to use',
-                        choices=['simple_attack', 'targeted_attack'])
+                        choices=['simple_attack', 'targeted_attack',
+                                 'improved_attack'])
     parser.add_argument('noise_size', type=float, help='the size of the noise')
 
     parser.add_argument('model', help='the model to attack',
@@ -46,8 +48,10 @@ def init_attack(args):
 
     if args.attack_type == 'simple_attack':
         problem = SimpleAttack(model, args.noise_size)
-    else:
+    elif args.attack_type == 'targeted_attack':
         problem = TargetedAttack(model, args.noise_size)
+    else:
+        problem = ImprovedTargetedAttack(model, args.noise_size)
 
     if args.algorithm == 'nsga2':
         algorithm = NSGA2(problem, args.popsize, args.maxiter)
