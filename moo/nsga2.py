@@ -38,7 +38,9 @@ class NSGA2:
 
             iteration += 1
 
-        return self.fast_non_dominated_sort(population)  # TODO ?
+        first_front = self.fast_non_dominated_sort(population)[0]
+
+        return first_front
 
     def initialize(self):
         """Returns the initial population."""

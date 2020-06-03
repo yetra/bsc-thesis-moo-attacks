@@ -88,10 +88,10 @@ if __name__ == '__main__':
             label = (label + 1) % 10
             print(f'target_label: {label}')
 
-        fronts = algorithm.run(orig_image, label)
-        plot_objectives(fronts[0])
+        results = algorithm.run(orig_image, label)
+        plot_objectives(results)
 
-        for solution in fronts[0]:
+        for solution in results:
             adv_probs = model.predict(orig_image + solution.variables)
             print(f'adv_label: {np.argmax(adv_probs)} {solution.objectives}')
 
