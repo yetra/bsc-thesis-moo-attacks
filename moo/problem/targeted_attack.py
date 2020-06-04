@@ -23,7 +23,7 @@ class TargetedAttack(Problem):
             solution.variables -= clip_delta
 
             predictions = self.model.predict(orig_image + solution.variables)
-            noise_strength = np.sum(np.abs(solution.variables))
+            noise_strength = np.sqrt(np.sum(solution.variables ** 2))
 
             solution.objectives = np.array([-predictions[label], noise_strength])
             self._update_o_extremes(solution)
