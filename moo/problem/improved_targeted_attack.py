@@ -5,7 +5,7 @@ from moo.problem.problem import Problem
 
 class ImprovedTargetedAttack(Problem):
     """A MOO problem for targeted attacks on image recognition models."""
-    NUM_OBJECTIVES = 2
+    NUM_OBJECTIVES = 3
 
     def __init__(self, model, noise_size):
         """Initializes TargetedAttack attributes."""
