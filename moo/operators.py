@@ -33,14 +33,12 @@ def select(population, tournament_size=2):
 
 def mutate(solution, p=0.02):
     """Mutates the given solution."""
-    mins, maxs = solution.problem.mins, solution.problem.maxs
     num_variables = solution.problem.num_variables
 
     perturbation = np.random.uniform(-0.02, 0.02, num_variables)
     booleans = (np.random.uniform(size=num_variables) < p).astype('float32')
 
     solution.variables += perturbation * booleans
-    np.clip(solution.variables, mins, maxs, out=solution.variables)
 
 
 def cross(parent_1, parent_2, alpha=0.7):
@@ -48,11 +46,9 @@ def cross(parent_1, parent_2, alpha=0.7):
     problem, parent_class = parent_1.problem, parent_1.__class__
 
     variables = (alpha * parent_1.variables + (1 - alpha) * parent_2.variables)
-    np.clip(variables, problem.mins, problem.maxs, out=variables)
     first_child = parent_class(problem, variables)
 
     variables = ((1 - alpha) * parent_1.variables + alpha * parent_2.variables)
-    np.clip(variables, problem.mins, problem.maxs, out=variables)
     second_child = parent_class(problem, variables)
 
     return first_child, second_child
