@@ -44,7 +44,9 @@ class SPEA2:
 
             iteration += 1
 
-        return archive
+        nondominated = [s for s in archive if s.fitness < 1]
+
+        return nondominated
 
     def initialize(self):
         """Returns the initial population."""
