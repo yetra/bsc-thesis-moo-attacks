@@ -36,19 +36,24 @@ def mutate(solution, p=0.02):
     num_variables = solution.problem.num_variables
 
     perturbation = np.random.uniform(-0.02, 0.02, num_variables)
-    booleans = (np.random.uniform(size=num_variables) < p).astype('float32')
+    to_perturb = (np.random.uniform(size=num_variables) < p).astype('float32')
 
-    solution.variables += perturbation * booleans
+    solution.variables += perturbation * to_perturb
 
 
-def cross(parent_1, parent_2, alpha=0.7):
-    """Performs arithmetic crossover on the given parent solutions."""
-    problem, parent_class = parent_1.problem, parent_1.__class__
+def cross(parent_1, parent_2, p=0.5):
+    """Performs uniform crossover on the given parent solutions."""
+    num_variables = parent_1.problem.num_variables
+    parent_class = parent_1.__class__
 
-    variables = (alpha * parent_1.variables + (1 - alpha) * parent_2.variables)
-    first_child = parent_class(problem, variables)
+    to_cross = (np.random.uniform(size=num_variables) < p).astype('float32')
 
-    variables = ((1 - alpha) * parent_1.variables + alpha * parent_2.variables)
-    second_child = parent_class(problem, variables)
+    variables = (to_cross * parent_1.variables
+                 + (1 - to_cross) * parent_2.variables)
+    first_child = parent_class(parent_1.problem, variables)
+
+    variables = ((1 - to_cross) * parent_1.variables
+                 + to_cross * parent_2.variables)
+    second_child = parent_class(parent_1.problem, variables)
 
     return first_child, second_child
