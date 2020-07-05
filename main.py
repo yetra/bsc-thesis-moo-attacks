@@ -86,8 +86,6 @@ if __name__ == '__main__':
               'adv_orig_prob', 'obj_0', 'obj_1', 'adv_probs', 'succ']
     target_label = 3
 
-    np.set_printoptions(formatter={'float': lambda x: f'{x:.4f}'})
-
     model, problem, algorithm = init_attack(parse_args())
 
     x_test = load_mnist(model.INPUT_SHAPE, model.NUM_OUTPUTS)[2]
@@ -100,14 +98,17 @@ if __name__ == '__main__':
 
     print(','.join(header))
 
-    for sample_idx, (orig_image, label) in enumerate(zip(x_rand, y_rand)):
+    for sample_idx, (orig_image, orig_label) in enumerate(zip(x_rand, y_rand)):
         probs = model.predict(orig_image)
-        orig_prob = probs[label]
+        orig_prob = probs[orig_label]
 
-        if label != np.argmax(probs):
+        if orig_label != np.argmax(probs):
             continue
-        if not isinstance(problem, SimpleAttack):
-            if label == target_label:
+
+        if isinstance(problem, SimpleAttack):
+            label = orig_label
+        else:
+            if orig_label == target_label:
                 continue
             label = target_label
 
@@ -123,7 +124,7 @@ if __name__ == '__main__':
 
             save_image(adv_image, filename=f'sample{sample_idx}_{adv_idx}.png')
 
-            line = [sample_idx, label, orig_prob, adv_label,
+            line = [sample_idx, orig_label, orig_prob, adv_label,
                     adv_probs[adv_label], adv_probs[label],
                     solution.objectives[0], solution.objectives[1],
                     adv_probs, adv_label == label]
