@@ -28,7 +28,7 @@ class NSGA2:
 
         iteration = 0
         while iteration < self.max_iterations:
-            print(f'i={iteration}')
+            # print(f'i={iteration}')
 
             offspring = operators.reproduce(population)
             self.problem.evaluate(offspring, orig_image, label)
