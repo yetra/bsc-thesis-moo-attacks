@@ -1,15 +1,20 @@
 import argparse
+import csv
 
 import numpy as np
+from PIL import Image
+from keras.datasets import mnist
 from matplotlib import pyplot as plt
 
 import util
-from convolutional_model import ConvolutionalModel
-from nsga2 import NSGA2
-from problem.simple_attack import SimpleAttack
-from problem.targeted_attack import TargetedAttack
-from simple_model import SimpleModel
-from spea2 import SPEA2
+from models.convolutional_model import ConvolutionalModel
+from models.simple_model import SimpleModel
+from moo.nsga2 import NSGA2
+from moo.problem.improved_targeted_attack import ImprovedTargetedAttack
+from moo.problem.simple_attack import SimpleAttack
+from moo.problem.targeted_attack import TargetedAttack
+from moo.spea2 import SPEA2
+from util import load_mnist
 
 
 def parse_args():
@@ -20,7 +25,8 @@ def parse_args():
                         help='the MOO algorithm to run')
 
     parser.add_argument('attack_type', help='the type of attack to use',
-                        choices=['simple_attack', 'targeted_attack'])
+                        choices=['simple_attack', 'targeted_attack',
+                                 'improved_attack'])
     parser.add_argument('noise_size', type=float, help='the size of the noise')
 
     parser.add_argument('model', help='the model to attack',
@@ -45,8 +51,10 @@ def init_attack(args):
 
     if args.attack_type == 'simple_attack':
         problem = SimpleAttack(model, args.noise_size)
-    else:
+    elif args.attack_type == 'targeted_attack':
         problem = TargetedAttack(model, args.noise_size)
+    else:
+        problem = ImprovedTargetedAttack(model, args.noise_size)
 
     if args.algorithm == 'nsga2':
         algorithm = NSGA2(problem, args.popsize, args.maxiter)
@@ -67,28 +75,65 @@ def plot_objectives(front):
     plt.show()
 
 
+def save_image(array, filename):
+    """Saves the given array as an image."""
+    array = (array * 255).reshape(28, 28).astype('uint8')
+    Image.fromarray(array, 'L').save(filename)
+
+
 if __name__ == '__main__':
+    header = ['sample_idx', 'orig_label', 'orig_prob', 'adv_label', 'adv_prob',
+              'adv_orig_prob', 'obj_0', 'obj_1', 'succ']
+    target_label = 3
+
     model, problem, algorithm = init_attack(parse_args())
 
-    x_train, y_train, _, _ = util.load_mnist(
-        model.INPUT_SHAPE, model.NUM_OUTPUTS)
+    x_test = load_mnist(model.INPUT_SHAPE, model.NUM_OUTPUTS)[2]
+    y_test = mnist.load_data()[1][1]
+    x_rand, y_rand = util.sample_choice(x_test, y_test, range(10), 3, seed=43)
 
-    for orig_image, orig_probs in zip(x_train, y_train):
-        label = np.argmax(orig_probs)
-        predicted_probs = model.predict(orig_image)
-        if label != np.argmax(predicted_probs):
+    csv_file = open('data.csv', 'w', newline='')
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerow(header)
+
+    print(','.join(header))
+
+    for sample_idx, (orig_image, orig_label) in enumerate(zip(x_rand, y_rand)):
+        probs = model.predict(orig_image)
+        orig_prob = probs[orig_label]
+
+        if orig_label != np.argmax(probs):
             continue
 
-        print(f'orig_label: {label} orig_prob: {np.max(predicted_probs):.4f}')
-        if isinstance(problem, TargetedAttack):
-            label = (label + 1) % 10
-            print(f'target_label: {label}')
+        if isinstance(problem, SimpleAttack):
+            label = orig_label
+        else:
+            if orig_label == target_label:
+                continue
+            label = target_label
 
-        fronts = algorithm.run(orig_image, label)
-        plot_objectives(fronts[0])
+        save_image(orig_image, filename=f'sample{sample_idx}_orig.png')
 
-        for solution in fronts[0]:
-            adv_probs = model.predict(orig_image + solution.variables)
-            print(f'adv_label: {np.argmax(adv_probs)} {solution.objectives}')
+        results = algorithm.run(orig_image, label)
+        # plot_objectives(results)
 
-        print()
+        for adv_idx, solution in enumerate(results):
+            adv_image = orig_image + solution.variables
+            adv_probs = model.predict(adv_image)
+            adv_label = np.argmax(adv_probs)
+
+            if isinstance(problem, SimpleAttack):
+                succ = adv_label != orig_label
+            else:
+                succ = adv_label == target_label
+
+            save_image(adv_image, filename=f'sample{sample_idx}_{adv_idx}.png')
+
+            line = [sample_idx, orig_label, orig_prob, adv_label,
+                    adv_probs[adv_label], adv_probs[orig_label],
+                    solution.objectives[0], solution.objectives[1], succ]
+            csv_writer.writerow(line)
+
+            print(','.join(str(e) for e in line))
+
+    csv_file.close()

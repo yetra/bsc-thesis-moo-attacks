@@ -1,6 +1,4 @@
-import math
-
-from solution.solution import Solution
+from moo.solution.solution import Solution
 
 
 class SPEA2Solution(Solution):

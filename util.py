@@ -26,29 +26,30 @@ def load_mnist(input_shape, num_outputs=10):
     return x_train, y_train, x_test, y_test
 
 
-def mnist_choice(data, num_images, test_split=0.5, seed=None):
+def sample_choice(x, y, labels, samples_per_label, seed=None):
     """
-    Chooses num_images random MNIST images.
+    Chooses samples_per_label random samples for each label in labels.
 
-    :param data: a tuple of train and test data to choose from
-    :param num_images: the number of random images to choose
-    :param test_split: the percentage of test images in the random choice
-    :param seed: the seed to use for choosing random images
-    :return: num_images random MNIST images with corresponding labels
+    :param x: the samples to choose from
+    :param y: the corresponding labels
+    :param labels: a collection of all possible labels
+    :param samples_per_label: the number of samples to choose for each label
+    :param seed: the seed to use for choosing random samples
+    :return: num_samples random samples with the corresponding labels
     """
-    x_train, y_train, x_test, y_test = data
+    rng = np.random if seed is None else np.random.RandomState(seed)
+    rand_x, rand_y = [], []
 
-    num_train = int(num_images * test_split)
-    num_test = num_images - num_train
+    for label in labels:
+        for _ in range(samples_per_label):
+            index = rng.randint(0, len(x))
+            while y[index] != label:
+                index = rng.randint(0, len(x))
 
-    rng = np if seed is None else np.random.RandomState(seed)
-    i_train = rng.random.choice(len(x_train), size=num_train, replace=False)
-    i_test = rng.random.choice(len(x_test), size=num_test, replace=False)
+            rand_x.append(x[index])
+            rand_y.append(label)
 
-    images = np.append(x_train[i_train], x_test[i_test], axis=0)
-    labels = np.append(y_train[i_train], y_test[i_test], axis=0)
-
-    return images, labels
+    return rand_x, rand_y
 
 
 def plot_results(history):

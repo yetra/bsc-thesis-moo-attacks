@@ -1,6 +1,6 @@
 import math
 
-import operators
+from moo import operators
 from moo.solution.nsga2_solution import NSGA2Solution
 
 
@@ -28,7 +28,7 @@ class NSGA2:
 
         iteration = 0
         while iteration < self.max_iterations:
-            print(f'i={iteration}')
+            # print(f'i={iteration}')
 
             offspring = operators.reproduce(population)
             self.problem.evaluate(offspring, orig_image, label)
@@ -38,7 +38,9 @@ class NSGA2:
 
             iteration += 1
 
-        return self.fast_non_dominated_sort(population)  # TODO ?
+        first_front = self.fast_non_dominated_sort(population)[0]
+
+        return first_front
 
     def initialize(self):
         """Returns the initial population."""

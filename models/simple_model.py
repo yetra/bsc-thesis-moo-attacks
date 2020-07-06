@@ -2,7 +2,7 @@ from keras.layers import Dense, Activation
 from keras.models import Sequential
 
 import util
-from attack_model import AttackModel
+from models.attack_model import AttackModel
 
 
 class SimpleModel(AttackModel):

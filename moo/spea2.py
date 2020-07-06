@@ -1,7 +1,7 @@
 import numpy as np
 
-import operators
-from solution.spea2_solution import SPEA2Solution
+from moo import operators
+from moo.solution.spea2_solution import SPEA2Solution
 
 
 class SPEA2:
@@ -32,7 +32,7 @@ class SPEA2:
 
         iteration = 0
         while iteration < self.max_iterations:
-            print(f'i={iteration}')
+            # print(f'i={iteration}')
 
             self.problem.evaluate(population, orig_image, label)
 
@@ -44,7 +44,9 @@ class SPEA2:
 
             iteration += 1
 
-        return archive
+        nondominated = [s for s in archive if s.fitness < 1]
+
+        return nondominated
 
     def initialize(self):
         """Returns the initial population."""
@@ -107,7 +109,7 @@ class SPEA2:
                         solution.objectives - other.objectives))
 
                 distances.sort()
-                solution.density = distances[k]  # TODO add separate attribute
+                solution.density = distances[k]
 
             archive.sort(key=lambda s: s.density, reverse=True)
             archive.pop()
