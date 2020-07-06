@@ -83,7 +83,7 @@ def save_image(array, filename):
 
 if __name__ == '__main__':
     header = ['sample_idx', 'orig_label', 'orig_prob', 'adv_label', 'adv_prob',
-              'adv_orig_prob', 'obj_0', 'obj_1', 'adv_probs', 'succ']
+              'adv_orig_prob', 'obj_0', 'obj_1', 'succ']
     target_label = 3
 
     model, problem, algorithm = init_attack(parse_args())
@@ -122,12 +122,16 @@ if __name__ == '__main__':
             adv_probs = model.predict(adv_image)
             adv_label = np.argmax(adv_probs)
 
+            if isinstance(problem, SimpleAttack):
+                succ = adv_label != orig_label
+            else:
+                succ = adv_label == target_label
+
             save_image(adv_image, filename=f'sample{sample_idx}_{adv_idx}.png')
 
             line = [sample_idx, orig_label, orig_prob, adv_label,
-                    adv_probs[adv_label], adv_probs[label],
-                    solution.objectives[0], solution.objectives[1],
-                    adv_probs, adv_label == label]
+                    adv_probs[adv_label], adv_probs[orig_label],
+                    solution.objectives[0], solution.objectives[1], succ]
             csv_writer.writerow(line)
 
             print(','.join(str(e) for e in line))
